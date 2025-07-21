@@ -24,9 +24,5 @@ export default function Page() {
         redirect(url);
     }
 
-    return (
-        <>
-            <h1>Redirecting...</h1>
-        </>
-    )
+    return <h1>Redirecting...</h1>;
 }

@@ -21,11 +21,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={`${montserrat.variable} antialiased h-screen w-screen`}>
-                <div className="h-full w-full flex flex-col justify-center items-center load-in">{children}</div>
+                <div className="h-full w-full flex flex-col justify-center items-center load-in">
+                    {children}
+                </div>
                 <footer className="w-full flex justify-center items-center gap-[20px] absolute bottom-0 mb-6">
-                    <p className="text-sm w-fit">
-                        Made with a pinch of Pepper
-                    </p>
+                    <p className="text-sm w-fit">Made with a pinch of Pepper</p>
                     <a href="https://github.com/0x5b62656e5d/relay" target="_blank">
                         <RiGithubFill />
                     </a>

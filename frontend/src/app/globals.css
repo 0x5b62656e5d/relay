@@ -27,7 +27,7 @@
     }
 
     input.url-input {
-        border-bottom: 1px solid #846c5d !important;        
+        border-bottom: 1px solid #846c5d !important;
     }
 
     span.input-border {
@@ -83,16 +83,19 @@ input:focus ~ .input-border {
     width: 100%;
 }
 
-a, button {
+a,
+button {
     transition: all 0.1s ease-in-out;
 }
 
-a:hover, button:hover {
+a:hover,
+button:hover {
     cursor: pointer;
     transform: scale(1.05);
 }
 
-a:focus, button:focus {
+a:focus,
+button:focus {
     transform: scale(1);
 }
 
