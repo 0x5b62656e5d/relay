@@ -1,15 +1,26 @@
+"use server";
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+    baseURL: process.env.BACKEND_URL,
 });
 
-export const shortenUrl = async (url: string): Promise<string> => {
+interface ShortenUrlResponse {
+    urlId: string;
+    error?: string;
+}
+
+export const shortenUrl = async (url: string): Promise<ShortenUrlResponse> => {
     try {
-        return (await api.post("/url", { url })).data.data;
+        return { urlId: (await api.post("/url", { url })).data.data };
     } catch (error) {
-        console.error("Error shortening URL:", error);
-        throw error;
+        if (axios.isAxiosError(error) && error.response) {
+            console.error("Error response from server:", error.response.data);
+            return { urlId: "", error: error.response.data };
+        } else {
+            console.error("Unexpected error:", error);
+            return { urlId: "", error: "An unexpected error occurred while shortening the URL" };
+        }
     }
 };
 
