@@ -22,7 +22,11 @@ export default function Home() {
     };
 
     const copyToClipboard = () => {
-        navigator.clipboard.writeText(`https://relay.pepper.fyi/${shortenedUrl}`);
+        if (!shortenedUrl) {
+            return;
+        }
+
+        navigator.clipboard.writeText(shortenedUrl);
         setCopied(true);
     };
 
