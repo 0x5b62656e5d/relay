@@ -1,3 +1,4 @@
+use actix_cors::Cors;
 use actix_web::{App, HttpServer, web};
 use config::ENV;
 use log::info;
@@ -26,7 +27,15 @@ async fn main() -> std::io::Result<()> {
     start_cron_jobs(db.clone()).await;
 
     HttpServer::new(move || {
+        let cors: Cors = Cors::default()
+            .allowed_origin("https://relay.pepper.fyi")
+            .allowed_origin("http://localhost:8080")
+            .allowed_methods(vec!["GET", "POST"])
+            .allowed_headers(vec!["Accept", "Content-Type"])
+            .max_age(3600);
+
         App::new()
+            .wrap(cors)
             .app_data(web::Data::new(db.clone()))
             .configure(routes::init_routes)
     })
