@@ -18,7 +18,7 @@ export default function Page() {
                 setUrl("");
             }
         })();
-    }, []);
+    }, [params.id]);
 
     if (url !== "") {
         redirect(url);
