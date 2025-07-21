@@ -10,4 +10,4 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 RUN pnpm build
-CMD ["pnpm", "start", "--port", "8080"]
+CMD ["pnpm", "start"]
