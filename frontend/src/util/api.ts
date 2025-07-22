@@ -10,6 +10,11 @@ interface ShortenUrlResponse {
     error?: string;
 }
 
+interface GetUrlResponse {
+    url: string;
+    error?: string;
+}
+
 export const shortenUrl = async (url: string): Promise<ShortenUrlResponse> => {
     try {
         return { urlId: (await api.post("/url", { url })).data.data };
@@ -24,11 +29,15 @@ export const shortenUrl = async (url: string): Promise<ShortenUrlResponse> => {
     }
 };
 
-export const getUrlById = async (id: string): Promise<string> => {
+export const getUrlById = async (id: string): Promise<GetUrlResponse> => {
     try {
-        return (await api.get(`/url/${id}`)).data.data.url;
+        return { url: (await api.get(`/url/${id}`)).data.data.url };
     } catch (error) {
-        console.error("Error fetching URL by ID:", error);
-        throw error;
+        if (axios.isAxiosError(error) && error.status === 404) {
+            return { url: "", error: "The requested URL is not found!" };
+        } else {
+            console.error("Unexpected error:", error);
+            return { url: "", error: "An unexpected error occurred while fetching the URL" };
+        }
     }
 };
