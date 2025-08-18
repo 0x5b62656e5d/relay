@@ -1,9 +1,9 @@
+use crate::util::generate_nanoid::generate_nanoid;
 use crate::validate_body;
 use crate::{response::make_query_response, validate_path};
 use actix_web::{HttpResponse, get, post, web};
 use chrono::Utc;
 use entity::urls;
-use nanoid;
 use sea_orm::{
     ActiveModelTrait, DatabaseConnection, DbErr, EntityTrait, FromQueryResult, QuerySelect,
 };
@@ -52,15 +52,9 @@ pub async fn create_url(
     db: web::Data<DatabaseConnection>,
 ) -> HttpResponse {
     let body: web::Json<UrlCreateBody> = validate_body!(body);
-    let dict: [char; 62] = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-        's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-        'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1',
-        '2', '3', '4', '5', '6', '7', '8', '9',
-    ];
 
     loop {
-        let id: String = nanoid::nanoid!(6, &dict);
+        let id: String = generate_nanoid();
 
         let new_url: urls::ActiveModel = urls::ActiveModel {
             id: sea_orm::ActiveValue::Set(id.clone()),
