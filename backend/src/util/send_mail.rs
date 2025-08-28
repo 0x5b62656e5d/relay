@@ -6,6 +6,7 @@ use lettre::{
 
 use crate::config::ENV;
 
+/// Creates and configures the SMTP client
 fn create_mailer() -> SmtpTransport {
     SmtpTransport::starttls_relay(&ENV.smtp_host)
         .unwrap()
@@ -17,6 +18,7 @@ fn create_mailer() -> SmtpTransport {
         .build()
 }
 
+/// Sends an email given the recipient, subject, and HTML body
 pub fn send_email(
     to: &str,
     subject: &str,
