@@ -12,6 +12,12 @@ pub struct Model {
     pub email: String,
     pub created_at: DateTime,
     pub banned: bool,
+    pub reset_key: Option<String>,
+    pub reset_key_expires: Option<DateTime>,
+    pub last_reset: Option<DateTime>,
+    pub verification_key: Option<String>,
+    pub verirication_key_expires: Option<DateTime>,
+    pub verified: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

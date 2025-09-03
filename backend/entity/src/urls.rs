@@ -14,6 +14,7 @@ pub struct Model {
     pub clicks: i32,
     #[sea_orm(column_type = "Text", nullable)]
     pub comments: Option<String>,
+    pub last_clicked: Option<DateTime>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
