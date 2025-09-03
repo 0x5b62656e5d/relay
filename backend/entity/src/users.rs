@@ -16,7 +16,7 @@ pub struct Model {
     pub reset_key_expires: Option<DateTime>,
     pub last_reset: Option<DateTime>,
     pub verification_key: Option<String>,
-    pub verirication_key_expires: Option<DateTime>,
+    pub verification_key_expires: Option<DateTime>,
     pub verified: bool,
 }
 
