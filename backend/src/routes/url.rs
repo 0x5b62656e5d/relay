@@ -85,6 +85,7 @@ pub async fn create_url(
             created_at: sea_orm::ActiveValue::Set(Utc::now().naive_utc()),
             comments: sea_orm::ActiveValue::Set(None),
             user_id: sea_orm::ActiveValue::Set(body.user_id.clone()),
+            ..Default::default()
         };
 
         match new_url.insert(db.get_ref()).await {
