@@ -91,7 +91,16 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(Urls::Table).to_owned())
+            .alter_table(
+                Table::alter()
+                    .table(Urls::Table)
+                    .drop_foreign_key("fk_user_urls")
+                    .drop_column(Urls::UserId)
+                    .drop_column(Urls::Clicks)
+                    .drop_column(Urls::Comments)
+                    .modify_column(date_time(Urls::CreatedAt).default(Expr::value(0)))
+                    .to_owned(),
+            )
             .await?;
 
         manager

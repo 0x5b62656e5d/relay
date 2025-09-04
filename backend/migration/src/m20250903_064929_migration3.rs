@@ -36,7 +36,17 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(Users::Table).to_owned())
+            .alter_table(
+                Table::alter()
+                    .table(Users::Table)
+                    .drop_column(Users::ResetKey)
+                    .drop_column(Users::ResetKeyExpires)
+                    .drop_column(Users::LastReset)
+                    .drop_column(Users::VerificationKey)
+                    .drop_column(Users::VeriricationKeyExpires)
+                    .drop_column(Users::Verified)
+                    .to_owned(),
+            )
             .await?;
 
         Ok(())
