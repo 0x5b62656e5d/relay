@@ -18,9 +18,11 @@ pub async fn create_account(
 ) -> HttpResponse {
     let body: web::Json<CreateAccountBody> = validate_body!(body);
 
+    let hashed_password: String = bcrypt::hash(&body.password, bcrypt::DEFAULT_COST).unwrap();
+    
     let user: users::ActiveModel = users::ActiveModel {
         email: sea_orm::ActiveValue::Set(body.email.clone()),
-        password: sea_orm::ActiveValue::Set(body.password.clone()),
+        password: sea_orm::ActiveValue::Set(hashed_password),
         ..Default::default()
     };
 
