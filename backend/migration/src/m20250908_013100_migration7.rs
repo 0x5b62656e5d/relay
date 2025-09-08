@@ -16,7 +16,7 @@ impl MigrationTrait for Migration {
             .alter_table(
                 Table::alter()
                     .table(Users::Table)
-                    .add_column(date_time_null(Users::Password))
+                    .add_column(string(Users::Password))
                     .to_owned(),
             )
             .await?;

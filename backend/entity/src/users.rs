@@ -18,6 +18,7 @@ pub struct Model {
     pub verification_key: Option<String>,
     pub verification_key_expires: Option<DateTime>,
     pub verified: bool,
+    pub password: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
