@@ -9,6 +9,7 @@ pub struct Env {
     pub smtp_port: u16,
     pub smtp_user: String,
     pub smtp_password: String,
+    pub jwt_secret: String,
 }
 
 impl Env {
@@ -31,6 +32,7 @@ impl Env {
             smtp_port: Self::get_env("SMTP_PORT").parse().unwrap(),
             smtp_user: Self::get_env("SMTP_USER"),
             smtp_password: Self::get_env("SMTP_PASSWORD"),
+            jwt_secret: Self::get_env("JWT_SECRET"),
         }
     }
 }
