@@ -1,0 +1,79 @@
+use crate::{config::ENV, response::make_query_response};
+use actix_web::{HttpRequest, HttpResponse, post, web};
+use entity::users;
+use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
+use serde::{Deserialize, Serialize};
+
+#[derive(Deserialize, Debug)]
+pub struct TokenClaim {
+    pub sub: String,
+    pub iat: i64,
+    pub exp: i64,
+}
+
+#[derive(Serialize)]
+pub struct MeResponse {
+    pub id: String,
+    pub email: String,
+    pub name: String,
+}
+
+#[post("")]
+pub async fn me(req: HttpRequest, db: web::Data<DatabaseConnection>) -> HttpResponse {
+    let token = match req.cookie("__Host-access") {
+        Some(c) => c.value().to_string(),
+        None => {
+            return HttpResponse::Unauthorized().json(make_query_response::<()>(
+                false,
+                None,
+                None,
+                Some("Missing token cookie"),
+            ));
+        }
+    };
+
+    let decoded = match jsonwebtoken::decode::<TokenClaim>(
+        &token,
+        &jsonwebtoken::DecodingKey::from_secret(ENV.jwt_secret.as_ref()),
+        &jsonwebtoken::Validation::default(),
+    ) {
+        Ok(t) => t,
+        Err(_) => {
+            return HttpResponse::Unauthorized().json(make_query_response::<()>(
+                false,
+                None,
+                None,
+                Some("Invalid token"),
+            ));
+        }
+    };
+
+    if decoded.claims.exp < chrono::Utc::now().timestamp() {
+        return HttpResponse::Unauthorized().json(make_query_response::<()>(
+            false,
+            None,
+            None,
+            Some("Token expired"),
+        ));
+    }
+
+    let user: users::Model = users::Entity::find()
+        .filter(users::Column::Id.eq(decoded.claims.sub))
+        .one(db.get_ref())
+        .await
+        .unwrap()
+        .unwrap();
+
+    let res: MeResponse = MeResponse {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+    };
+
+    HttpResponse::Ok().json(make_query_response::<MeResponse>(
+        true,
+        Some(&res),
+        None,
+        None,
+    ))
+}
