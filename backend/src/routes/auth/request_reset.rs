@@ -52,7 +52,7 @@ pub async fn request_reset(
     };
 
     if let Err(e) = active_user.update(db.get_ref()).await {
-        eprintln!("Could not update user's reset verification key: {:?}", e);
+        eprintln!("Couldn't not update user's reset verification key: {:?}", e);
 
         return HttpResponse::InternalServerError().json(make_query_response::<()>(
             false,
