@@ -6,17 +6,17 @@ use serde::Deserialize;
 use crate::{response::make_query_response, validate_body};
 
 #[derive(Deserialize)]
-pub struct CreateAccountBody {
+pub struct DeleteAccountBody {
     pub email: String,
     pub password: String,
 }
 
 #[post("")]
-pub async fn create_account(
-    body: Result<web::Json<CreateAccountBody>, actix_web::error::Error>,
+pub async fn delete_account(
+    body: Result<web::Json<DeleteAccountBody>, actix_web::error::Error>,
     db: web::Data<DatabaseConnection>,
 ) -> HttpResponse {
-    let body: web::Json<CreateAccountBody> = validate_body!(body);
+    let body: web::Json<DeleteAccountBody> = validate_body!(body);
 
     let user: Option<users::Model> = users::Entity::find()
         .filter(users::Column::Email.eq(&body.email))
