@@ -1,15 +1,8 @@
-use crate::{config::ENV, response::make_query_response};
+use crate::{config::ENV, response::make_query_response, types::types::TokenClaim};
 use actix_web::{HttpRequest, HttpResponse, post, web};
 use entity::users;
 use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
-use serde::{Deserialize, Serialize};
-
-#[derive(Deserialize, Debug)]
-pub struct TokenClaim {
-    pub sub: String,
-    pub iat: i64,
-    pub exp: i64,
-}
+use serde::{Serialize};
 
 #[derive(Serialize)]
 pub struct MeResponse {
