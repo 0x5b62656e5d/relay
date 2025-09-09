@@ -28,10 +28,10 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
             .service(health::health),
     )
     .service(
-        web::scope("/url").service(url::get_url).service(
+        web::scope("/url").service(url::url::get_url).service(
             web::scope("")
                 .wrap(Governor::new(&url_post_governor))
-                .service(url::create_url),
+                .service(url::url::create_url),
         ),
     )
     .service(

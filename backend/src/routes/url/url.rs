@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct UrlCreateBody {
-    pub user_id: String,
+    pub user_id: Option<String>,
     pub url: String,
 }
 
@@ -57,14 +57,12 @@ pub async fn get_url(
             Some("URL not found"),
             None,
         )),
-        Err(_) => {
-            HttpResponse::InternalServerError().json(make_query_response::<()>(
-                false,
-                None,
-                Some("Error fetching URL"),
-                None,
-            ))
-        }
+        Err(_) => HttpResponse::InternalServerError().json(make_query_response::<()>(
+            false,
+            None,
+            Some("Error fetching URL"),
+            None,
+        )),
     }
 }
 
@@ -84,7 +82,7 @@ pub async fn create_url(
             clicks: sea_orm::ActiveValue::Set(0),
             created_at: sea_orm::ActiveValue::Set(Utc::now().naive_utc()),
             comments: sea_orm::ActiveValue::Set(None),
-            user_id: sea_orm::ActiveValue::Set(body.user_id.clone()),
+            user_id: sea_orm::ActiveValue::Set(body.user_id.clone().unwrap_or("".into())),
             ..Default::default()
         };
 
