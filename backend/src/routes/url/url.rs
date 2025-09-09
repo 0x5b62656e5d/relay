@@ -1,7 +1,8 @@
 use crate::util::generate_nanoid::generate_nanoid;
+use crate::util::token::decode_token;
 use crate::validate_body;
 use crate::{response::make_query_response, validate_path};
-use actix_web::{HttpResponse, get, post, web};
+use actix_web::{HttpRequest, HttpResponse, get, post, web};
 use chrono::Utc;
 use entity::urls;
 use sea_orm::ActiveValue::Set;
@@ -12,7 +13,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct UrlCreateBody {
-    pub user_id: Option<String>,
     pub url: String,
 }
 
@@ -69,21 +69,40 @@ pub async fn get_url(
 #[post("")]
 pub async fn create_url(
     body: Result<web::Json<UrlCreateBody>, actix_web::error::Error>,
+    req: HttpRequest,
     db: web::Data<DatabaseConnection>,
 ) -> HttpResponse {
     let body: web::Json<UrlCreateBody> = validate_body!(body);
 
+    let token = req.cookie("__Host-access");
+
     loop {
         let id: String = generate_nanoid();
 
-        let new_url: urls::ActiveModel = urls::ActiveModel {
-            id: sea_orm::ActiveValue::Set(id.clone()),
-            url: sea_orm::ActiveValue::Set(body.url.clone()),
-            clicks: sea_orm::ActiveValue::Set(0),
-            created_at: sea_orm::ActiveValue::Set(Utc::now().naive_utc()),
-            comments: sea_orm::ActiveValue::Set(None),
-            user_id: sea_orm::ActiveValue::Set(body.user_id.clone().unwrap_or("".into())),
-            ..Default::default()
+        let new_url: urls::ActiveModel = match token.clone() {
+            Some(t) => {
+                println!("decoding");
+                let decoded = decode_token(t.value().to_string());
+
+                urls::ActiveModel {
+                    id: sea_orm::ActiveValue::Set(id.clone()),
+                    url: sea_orm::ActiveValue::Set(body.url.clone()),
+                    clicks: sea_orm::ActiveValue::Set(0),
+                    created_at: sea_orm::ActiveValue::Set(Utc::now().naive_utc()),
+                    comments: sea_orm::ActiveValue::Set(None),
+                    user_id: sea_orm::ActiveValue::Set(Some(decoded.unwrap().claims.sub)),
+                    ..Default::default()
+                }
+            },
+            None => urls::ActiveModel {
+                id: sea_orm::ActiveValue::Set(id.clone()),
+                url: sea_orm::ActiveValue::Set(body.url.clone()),
+                clicks: sea_orm::ActiveValue::Set(0),
+                created_at: sea_orm::ActiveValue::Set(Utc::now().naive_utc()),
+                comments: sea_orm::ActiveValue::Set(None),
+                user_id: sea_orm::ActiveValue::Set(None),
+                ..Default::default()
+            },
         };
 
         match new_url.insert(db.get_ref()).await {
@@ -102,6 +121,8 @@ pub async fn create_url(
                 {
                     continue;
                 }
+
+                log::error!("Failed to create URL1: {}", err);
 
                 break HttpResponse::InternalServerError().json(make_query_response::<()>(
                     false,
