@@ -122,8 +122,6 @@ pub async fn create_url(
                     continue;
                 }
 
-                log::error!("Failed to create URL1: {}", err);
-
                 break HttpResponse::InternalServerError().json(make_query_response::<()>(
                     false,
                     None,
