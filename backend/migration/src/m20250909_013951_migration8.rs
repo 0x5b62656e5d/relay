@@ -22,6 +22,24 @@ impl MigrationTrait for Migration {
             .alter_table(
                 Table::alter()
                     .table(Urls::Table)
+                    .drop_column(Urls::UserId)
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .alter_table(
+                Table::alter()
+                    .table(Urls::Table)
+                    .add_column(string_null(Urls::UserId))
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .alter_table(
+                Table::alter()
+                    .table(Urls::Table)
                     .add_foreign_key(
                         TableForeignKey::new()
                             .name("fk-urls-user_id")
@@ -42,8 +60,25 @@ impl MigrationTrait for Migration {
             .alter_table(
                 Table::alter()
                     .table(Urls::Table)
-                    .add_column(string_null(Urls::UserId))
                     .drop_foreign_key("fk-urls-user_id")
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .alter_table(
+                Table::alter()
+                    .table(Urls::Table)
+                    .drop_column(Urls::UserId)
+                    .to_owned(),
+            )
+            .await?;
+
+        manager
+            .alter_table(
+                Table::alter()
+                    .table(Urls::Table)
+                    .add_column(string_null(Urls::UserId))
                     .to_owned(),
             )
             .await?;

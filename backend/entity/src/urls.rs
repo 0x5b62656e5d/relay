@@ -10,11 +10,11 @@ pub struct Model {
     pub id: String,
     pub url: String,
     pub created_at: DateTime,
-    pub user_id: String,
     pub clicks: i32,
     #[sea_orm(column_type = "Text", nullable)]
     pub comments: Option<String>,
     pub last_clicked: Option<DateTime>,
+    pub user_id: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -26,15 +26,13 @@ pub enum Relation {
         on_update = "NoAction",
         on_delete = "NoAction"
     )]
-    Users2,
-    #[sea_orm(
-        belongs_to = "super::users::Entity",
-        from = "Column::UserId",
-        to = "super::users::Column::Id",
-        on_update = "NoAction",
-        on_delete = "Cascade"
-    )]
-    Users1,
+    Users,
+}
+
+impl Related<super::users::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Users.def()
+    }
 }
 
 impl ActiveModelBehavior for ActiveModel {}
