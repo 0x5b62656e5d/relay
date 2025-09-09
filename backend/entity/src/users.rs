@@ -18,19 +18,10 @@ pub struct Model {
     pub verification_key: Option<String>,
     pub verification_key_expires: Option<DateTime>,
     pub verified: bool,
-    pub password: String,
+    pub password: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {
-    #[sea_orm(has_many = "super::urls::Entity")]
-    Urls,
-}
-
-impl Related<super::urls::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::Urls.def()
-    }
-}
+pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}

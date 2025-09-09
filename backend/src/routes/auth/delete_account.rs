@@ -35,7 +35,7 @@ pub async fn delete_account(
 
     let user: users::Model = user.unwrap();
 
-    if body.password != user.password {
+    if body.password != user.password.unwrap_or_default() {
         return HttpResponse::BadRequest().json(make_query_response::<()>(
             false,
             None,

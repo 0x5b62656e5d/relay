@@ -22,7 +22,7 @@ pub async fn create_account(
     
     let user: users::ActiveModel = users::ActiveModel {
         email: sea_orm::ActiveValue::Set(body.email.clone()),
-        password: sea_orm::ActiveValue::Set(hashed_password),
+        password: sea_orm::ActiveValue::Set(Some(hashed_password)),
         ..Default::default()
     };
 

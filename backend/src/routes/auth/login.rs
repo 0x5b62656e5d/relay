@@ -44,7 +44,11 @@ pub async fn login(
         ));
     }
 
-    let v: bool = bcrypt::verify(&body.password, &user.as_ref().unwrap().password).unwrap_or(false);
+    let v: bool = bcrypt::verify(
+        &body.password,
+        &user.as_ref().unwrap().password.as_ref().unwrap(),
+    )
+    .unwrap_or(false);
 
     if !v {
         return HttpResponse::NotFound().json(make_query_response::<()>(

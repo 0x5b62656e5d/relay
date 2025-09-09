@@ -1,9 +1,15 @@
 use sea_orm_migration::{prelude::*, schema::*};
 
 #[derive(DeriveIden)]
+pub enum Urls {
+    Table,
+    UserId,
+}
+
+#[derive(DeriveIden)]
 pub enum Users {
     Table,
-    Password,
+    Id,
 }
 
 #[derive(DeriveMigrationName)]
@@ -15,8 +21,15 @@ impl MigrationTrait for Migration {
         manager
             .alter_table(
                 Table::alter()
-                    .table(Users::Table)
-                    .add_column(string_null(Users::Password))
+                    .table(Urls::Table)
+                    .add_foreign_key(
+                        TableForeignKey::new()
+                            .name("fk-urls-user_id")
+                            .from_tbl(Users::Table)
+                            .from_col(Urls::UserId)
+                            .to_tbl(Users::Table)
+                            .to_col(Users::Id),
+                    )
                     .to_owned(),
             )
             .await?;
@@ -28,8 +41,9 @@ impl MigrationTrait for Migration {
         manager
             .alter_table(
                 Table::alter()
-                    .table(Users::Table)
-                    .drop_column(Users::Password)
+                    .table(Urls::Table)
+                    .add_column(string_null(Urls::UserId))
+                    .drop_foreign_key("fk-urls-user_id")
                     .to_owned(),
             )
             .await?;

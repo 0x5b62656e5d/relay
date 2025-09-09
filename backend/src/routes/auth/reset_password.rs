@@ -76,7 +76,7 @@ pub async fn reset_password(
         id: Set(user.id.clone()),
         reset_key: Set(None),
         reset_key_expires: Set(None),
-        password: Set(body.new_password.clone()),
+        password: Set(Some(body.new_password.clone())),
         ..Default::default()
     };
 
