@@ -1,8 +1,8 @@
-use crate::{config::ENV, response::make_query_response, types::types::TokenClaim};
+use crate::{response::make_query_response, util::token::decode_token};
 use actix_web::{HttpRequest, HttpResponse, post, web};
 use entity::users;
 use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
-use serde::{Serialize};
+use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct MeResponse {
@@ -25,11 +25,7 @@ pub async fn me(req: HttpRequest, db: web::Data<DatabaseConnection>) -> HttpResp
         }
     };
 
-    let decoded = match jsonwebtoken::decode::<TokenClaim>(
-        &token,
-        &jsonwebtoken::DecodingKey::from_secret(ENV.jwt_secret.as_ref()),
-        &jsonwebtoken::Validation::default(),
-    ) {
+    let decoded = match decode_token(token) {
         Ok(t) => t,
         Err(_) => {
             return HttpResponse::Unauthorized().json(make_query_response::<()>(
