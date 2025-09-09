@@ -34,6 +34,7 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
                 .service(url::url::create_url),
         ),
     )
+    .service(web::scope("/urls/list").service(url::list::list_url))
     .service(
         web::scope("/auth")
             .wrap(Governor::new(&auth_governor))
