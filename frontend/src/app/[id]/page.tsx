@@ -1,27 +1,38 @@
 "use client";
-import { getUrlById } from "@/app/backend/url";
 import { redirect, useParams } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Page() {
-    const params = useParams<{ id: string }>();
+    const { id } = useParams();
     const [url, setUrl] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         (async () => {
-            const fetchedData = await getUrlById(params.id);
+            const res = await fetch(`/api/url/${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!res.ok) {
+                setError("An error occurred while fetching the URL.");
+                return;
+            }
+
+            const fetchedData = await res.json();
 
             if (fetchedData.error) {
                 setError(fetchedData.error);
                 return;
             } else {
-                setUrl(fetchedData.url);
+                setUrl(fetchedData.data.url);
                 setError(null);
             }
         })();
-    }, [params.id]);
+    }, [id]);
 
     if (url !== "") {
         redirect(url);

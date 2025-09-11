@@ -1,5 +1,4 @@
 "use client";
-import { shortenUrl } from "@/app/backend/url";
 import { RiClipboardLine } from "@remixicon/react";
 import { useState } from "react";
 import { Button } from "@/app/components/Button";
@@ -11,12 +10,22 @@ export default function Home() {
 
     const handleShorten = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const shortenedRes = await shortenUrl((event.target as HTMLFormElement).url.value);
+        const res = await fetch ("/api/url", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                url: (event.target as HTMLFormElement).url.value,
+            }),
+        });
+        
+        const shortenedRes = await res.json();
 
         if (shortenedRes.error) {
             setError(shortenedRes.error);
         } else {
-            setShortenedUrl(`https://relay.pepper.fyi/${shortenedRes.urlId}`);
+            setShortenedUrl(`https://relay.pepper.fyi/${shortenedRes.data.urlId}`);
             setError(null);
             setCopied(false);
         }
