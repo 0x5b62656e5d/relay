@@ -1,5 +1,5 @@
 "use client";
-import { shortenUrl } from "@/util/api";
+import { shortenUrl } from "@/app/backend/url";
 import { RiClipboardLine } from "@remixicon/react";
 import { useState } from "react";
 
