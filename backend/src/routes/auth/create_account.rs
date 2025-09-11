@@ -9,6 +9,7 @@ use crate::{response::make_query_response, validate_body};
 pub struct CreateAccountBody {
     pub email: String,
     pub password: String,
+    pub name: String,
 }
 
 #[post("")]
@@ -23,6 +24,7 @@ pub async fn create_account(
     let user: users::ActiveModel = users::ActiveModel {
         email: sea_orm::ActiveValue::Set(body.email.clone()),
         password: sea_orm::ActiveValue::Set(Some(hashed_password)),
+        name: sea_orm::ActiveValue::Set(body.name.clone()),
         ..Default::default()
     };
 
