@@ -41,7 +41,7 @@ export default function Home() {
     };
 
     return (
-        <>
+        <div className="flex flex-col justify-center items-center load-in">
             <h1 className="text-4xl font-bold">Relay</h1>
             <p className="mt-4 text-lg">A URL shortener built with NextJS and Rust</p>
             <p className="mt-2 text-m">All URL&apos;s expire in 14 days!</p>
@@ -94,6 +94,6 @@ export default function Home() {
                     <p>Error: {error}</p>
                 </div>
             )}
-        </>
+        </div>
     );
 }
