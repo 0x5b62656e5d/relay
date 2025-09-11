@@ -1,5 +1,5 @@
 "use client";
-import { getUrlById } from "@/util/api";
+import { getUrlById } from "@/app/backend/url";
 import { redirect, useParams } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
