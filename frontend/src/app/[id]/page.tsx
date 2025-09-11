@@ -2,6 +2,7 @@
 import { redirect, useParams } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Button } from "@/app/components/Button";
 
 export default function Page() {
     const { id } = useParams();
@@ -46,9 +47,9 @@ export default function Page() {
                     <div className="mt-4 text-red-500">
                         <p>Error: {error}</p>
                     </div>
-                    <button className="mt-4 bg-[var(--button-bg)] text-[var(--button-fg)] px-4 py-2 rounded">
+                    <Button type="button" className="mt-4">
                         <Link href="/">Go home</Link>
-                    </button>
+                    </Button>
                 </>
             )}
         </>
