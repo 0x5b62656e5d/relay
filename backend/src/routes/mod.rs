@@ -42,7 +42,6 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
             .service(web::scope("/logout").service(auth::logout::logout))
             .service(web::scope("/me").service(auth::me::me))
             .service(web::scope("/verify").service(auth::verify::verify))
-            .service(web::scope("/request-verify").service(auth::request_verify::request_verify))
             .service(web::scope("/verify-reset").service(auth::verify_reset::verify))
             .service(web::scope("/request-reset").service(auth::request_reset::request_reset))
             .service(web::scope("/reset-password").service(auth::reset_password::reset_password))
