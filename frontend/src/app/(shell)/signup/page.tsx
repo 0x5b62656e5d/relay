@@ -2,7 +2,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/app/components/Button";
-import { signup } from "../backend/auth";
 
 interface SignupType {
     email: string;
@@ -42,13 +41,33 @@ export default function Signup() {
             return;
         }
 
-        await signup(formData.email, formData.name, formData.password).then(res => {
-            if (res.error) {
-                setError(res.error);
-            } else {
-                setSuccess(res.message);
-            }
+        // const res = await signup(formData.email, formData.name, formData.password).then(res => {
+        //     if (res.error) {
+        //         setError(res.error);
+        //     } else {
+        //         setSuccess(res.message);
+        //     }
+        // });
+
+        const res = await fetch("/api/auth/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: formData.email,
+                name: formData.name,
+                password: formData.password,
+            }),
         });
+
+        console.log(res);
+
+        if (res.ok) {
+            setSuccess("Success! Check your email to verify your account.");
+        } else {
+            setError((await res.json()).error);
+        }
 
         setLoading(false);
     };
