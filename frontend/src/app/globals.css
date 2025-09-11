@@ -58,14 +58,14 @@ body {
     }
 }
 
-input.url-input {
+input {
     background-color: transparent;
     width: 100%;
     border: none;
     border-bottom: 1px solid #a69080;
 }
 
-span.input-border {
+input + span {
     position: absolute;
     background: #6c584c;
     width: 0%;
@@ -79,7 +79,7 @@ input:focus {
     outline: none;
 }
 
-input:focus ~ .input-border {
+input:focus + span {
     width: 100%;
 }
 

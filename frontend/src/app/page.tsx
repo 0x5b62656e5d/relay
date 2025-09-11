@@ -2,6 +2,7 @@
 import { shortenUrl } from "@/app/backend/url";
 import { RiClipboardLine } from "@remixicon/react";
 import { useState } from "react";
+import { Button } from "@/app/components/Button";
 
 export default function Home() {
     const [shortenedUrl, setShortenedUrl] = useState<string | null>(null);
@@ -55,12 +56,7 @@ export default function Home() {
                         />
                         <span className="input-border" />
                     </div>
-                    <button
-                        type="submit"
-                        className="bg-[var(--button-bg)] text-[var(--button-fg)] px-4 py-2 rounded"
-                    >
-                        Shorten URL
-                    </button>
+                    <Button type="submit" text="Shorten URL" />
                 </form>
             </div>
 
