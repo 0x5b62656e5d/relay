@@ -17,7 +17,7 @@ pub async fn verify(
     let reset_key: String = reset_key.into_inner();
 
     let user: Option<users::Model> = users::Entity::find()
-        .filter(users::Column::VerificationKey.eq(&hash_sha256_key(&reset_key)))
+        .filter(users::Column::ResetKey.eq(&hash_sha256_key(&reset_key)))
         .one(db.get_ref())
         .await
         .unwrap();
@@ -40,13 +40,6 @@ pub async fn verify(
             Some("User is banned"),
             None,
         ));
-    } else if user.verified {
-        return HttpResponse::BadRequest().json(make_query_response::<()>(
-            false,
-            None,
-            Some("User is already verified"),
-            None,
-        ));
     } else if user.reset_key_expires.unwrap() < chrono::Utc::now().naive_utc() {
         return HttpResponse::BadRequest().json(make_query_response::<()>(
             false,
@@ -59,24 +52,6 @@ pub async fn verify(
             false,
             None,
             Some("Invalid verification key"),
-            None,
-        ));
-    }
-
-    let active_user: users::ActiveModel = users::ActiveModel {
-        id: Set(user.id.clone()),
-        reset_key: Set(None),
-        reset_key_expires: Set(None),
-        ..Default::default()
-    };
-
-    if let Err(e) = active_user.update(db.get_ref()).await {
-        eprintln!("Could update user's email verification key: {:?}", e);
-
-        return HttpResponse::InternalServerError().json(make_query_response::<()>(
-            false,
-            None,
-            Some("Failed to update user's email verification key"),
             None,
         ));
     }

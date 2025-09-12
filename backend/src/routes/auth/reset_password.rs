@@ -25,7 +25,7 @@ pub async fn reset_password(
     let body: web::Json<ResetBody> = validate_body!(body);
 
     let user: Option<users::Model> = users::Entity::find()
-        .filter(users::Column::VerificationKey.eq(&hash_sha256_key(&reset_key)))
+        .filter(users::Column::ResetKey.eq(&hash_sha256_key(&reset_key)))
         .one(db.get_ref())
         .await
         .unwrap();
@@ -48,13 +48,6 @@ pub async fn reset_password(
             Some("User is banned"),
             None,
         ));
-    } else if user.verified {
-        return HttpResponse::BadRequest().json(make_query_response::<()>(
-            false,
-            None,
-            Some("User is already verified"),
-            None,
-        ));
     } else if user.reset_key_expires.unwrap() < chrono::Utc::now().naive_utc() {
         return HttpResponse::BadRequest().json(make_query_response::<()>(
             false,
@@ -71,11 +64,13 @@ pub async fn reset_password(
         ));
     }
 
+    let hashed_password: String = bcrypt::hash(&body.new_password, bcrypt::DEFAULT_COST).unwrap();
+
     let active_user: users::ActiveModel = users::ActiveModel {
         id: Set(user.id.clone()),
         reset_key: Set(None),
         reset_key_expires: Set(None),
-        password: Set(Some(body.new_password.clone())),
+        password: Set(Some(hashed_password)),
         ..Default::default()
     };
 
