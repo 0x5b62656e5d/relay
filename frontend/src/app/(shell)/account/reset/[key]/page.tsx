@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { redirect, useParams } from "next/navigation";
 import { Button } from "@/app/components/Button";
+import { StatusMessage } from "@/util/types";
 
 interface LoginType {
     password: string;
@@ -13,9 +14,11 @@ export default function Login() {
     const { key } = useParams();
     const [formData, setFormData] = useState<LoginType>({ password: "", confirmPassword: "" });
     const [loading, setLoading] = useState<boolean>(false);
-    const [success, setSuccess] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
     const [verifiedKey, setVerifiedKey] = useState<boolean>(false);
+    const [statusMessage, setStatusMessage] = useState<StatusMessage>({
+        success: null,
+        message: null,
+    });
 
     useEffect(() => {
         (async () => {
@@ -26,7 +29,10 @@ export default function Login() {
             if (res.ok) {
                 setVerifiedKey(true);
             } else {
-                setError("Invalid or expired reset key.");
+                setStatusMessage({
+                    success: false,
+                    message: "Invalid or expired reset key.",
+                });
             }
         })();
     }, []);
@@ -37,10 +43,11 @@ export default function Login() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         setLoading(true);
+        setStatusMessage({ success: null, message: null });
         e.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
-            setError("Passwords do not match.");
+            setStatusMessage({ success: false, message: "Passwords do not match." });
             setLoading(false);
             return;
         }
@@ -51,7 +58,7 @@ export default function Login() {
 
         if (!res.ok) {
             const json = await res.json();
-            setError(json.error);
+            setStatusMessage({ success: false, message: json.error || "Something went wrong" });
             setLoading(false);
             return;
         }
@@ -68,12 +75,12 @@ export default function Login() {
 
         if (!res2.ok) {
             const json = await res.json();
-            setError(json.error);
+            setStatusMessage({ success: false, message: json.error || "Something went wrong" });
             setLoading(false);
             return;
         }
 
-        setSuccess("Password reset successfully!");
+        setStatusMessage({ success: true, message: "Password reset successfully!" });
 
         setLoading(false);
     };
@@ -119,23 +126,20 @@ export default function Login() {
                         </div>
                         <Button type="submit" text="Reset password" loading={loading} />
 
-                        {error && (
-                            <div className="mt-4 text-red-500 text-center">
-                                <p>Error: {error}</p>
-                            </div>
-                        )}
-                        {success && (
-                            <div className="mt-4 text-green-500 text-center">
-                                <p>Success: {success}</p>
-                            </div>
-                        )}
+                        <p
+                            className={`text-center mt-4 text-${
+                                statusMessage.success ? "green-600" : "red-500"
+                            } fade-in ${statusMessage.message ? "opacity-100" : "opacity-0"}`}
+                        >
+                            {statusMessage.message}
+                        </p>
                     </form>
                 </>
             ) : (
                 <>
-                    {error ? (
+                    {statusMessage.success !== null && !statusMessage.success ? (
                         <div className="mt-4 text-red-500 text-center">
-                            <p>Error: {error}</p>
+                            <p>{statusMessage.message}</p>
                         </div>
                     ) : (
                         <div className="mt-4 text-center">

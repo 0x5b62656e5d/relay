@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Button } from "@/app/components/Button";
 import { useRouter } from "next/navigation";
 import { UserContext } from "../layout";
+import { StatusMessage } from "@/util/types";
 
 interface LoginType {
     email: string;
@@ -14,8 +15,10 @@ interface LoginType {
 export default function Login() {
     const [formData, setFormData] = useState<LoginType>({ email: "", password: "" });
     const [loading, setLoading] = useState<boolean>(false);
-    const [success, _setSuccess] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [statusMessage, setStatusMessage] = useState<StatusMessage>({
+        success: null,
+        message: null,
+    });
     const router = useRouter();
     const { userState, setUserState } = useContext(UserContext);
 
@@ -41,6 +44,7 @@ export default function Login() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         setLoading(true);
+        setStatusMessage({ success: null, message: null });
         e.preventDefault();
 
         const res = await fetch("/api/auth/login", {
@@ -56,7 +60,10 @@ export default function Login() {
 
         if (!res.ok) {
             const json = await res.json();
-            setError(json.error);
+            setStatusMessage({
+                success: false,
+                message: json.error || "Something went wrong",
+            });
             setLoading(false);
             return;
         }
@@ -112,16 +119,13 @@ export default function Login() {
                 </div>
                 <Button type="submit" text="Log in" loading={loading} />
 
-                {error && (
-                    <div className="mt-4 text-red-500 text-center">
-                        <p>Error: {error}</p>
-                    </div>
-                )}
-                {success && (
-                    <div className="mt-4 text-green-500 text-center">
-                        <p>Success: {success}</p>
-                    </div>
-                )}
+                <p
+                    className={`text-center text-${
+                        statusMessage.success ? "green-600" : "red-500"
+                    } fade-in ${statusMessage.message ? "opacity-100" : "opacity-0"}`}
+                >
+                    {statusMessage.message}
+                </p>
             </form>
             <div className="flex flex-col justify-center items-center gap-2">
                 <div className="flex flex-col justify-center items-center gap-1">

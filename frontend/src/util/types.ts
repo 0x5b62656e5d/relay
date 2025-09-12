@@ -14,3 +14,8 @@ export interface Url {
     comments: string | null;
     lastClicked: Date;
 }
+
+export interface StatusMessage {
+    success: boolean | null;
+    message: string | null;
+}

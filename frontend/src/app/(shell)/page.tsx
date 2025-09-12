@@ -2,15 +2,20 @@
 import { RiClipboardLine } from "@remixicon/react";
 import { useState } from "react";
 import { Button } from "@/app/components/Button";
+import { StatusMessage } from "@/util/types";
 
 export default function Home() {
     const [shortenedUrl, setShortenedUrl] = useState<string | null>(null);
     const [copied, setCopied] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+    const [statusMessage, setStatusMessage] = useState<StatusMessage>({
+        success: null,
+        message: null,
+    });
 
     const handleShorten = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        const res = await fetch ("/api/url", {
+        setStatusMessage({ success: null, message: null });
+        const res = await fetch("/api/url", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -19,14 +24,13 @@ export default function Home() {
                 url: (event.target as HTMLFormElement).url.value,
             }),
         });
-        
+
         const shortenedRes = await res.json();
 
         if (shortenedRes.error) {
-            setError(shortenedRes.error);
+            setStatusMessage({ success: false, message: shortenedRes.error });
         } else {
             setShortenedUrl(`https://relay.pepper.fyi/${shortenedRes.data.urlId}`);
-            setError(null);
             setCopied(false);
         }
     };
@@ -89,11 +93,12 @@ export default function Home() {
                 </p>
             </div>
 
-            {error && (
-                <div className="mt-4 text-red-500">
-                    <p>Error: {error}</p>
-                </div>
-            )}
+            <p
+                className={`text-center mt-4 text-red-500
+                    fade-in ${statusMessage.message ? "opacity-100" : "opacity-0"}`}
+            >
+                {statusMessage.message}
+            </p>
         </div>
     );
 }

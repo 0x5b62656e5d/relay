@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/app/components/Button";
+import { StatusMessage } from "@/util/types";
 
 interface SignupType {
     email: string;
@@ -18,8 +19,10 @@ export default function Signup() {
         confirmPassword: "",
     });
     const [loading, setLoading] = useState<boolean>(false);
-    const [success, setSuccess] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [statusMessage, setStatusMessage] = useState<StatusMessage>({
+        success: null,
+        message: null,
+    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,16 +30,18 @@ export default function Signup() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         setLoading(true);
-        setError(null);
-        setSuccess(null);
+        setStatusMessage({ success: null, message: null });
         e.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
-            setError("Passwords do not match");
+            setStatusMessage({ success: false, message: "Passwords do not match" });
             setLoading(false);
             return;
         } else if (!/^[\p{L} ]+$/u.test(formData.name)) {
-            setError("Name can only contain letters and spaces");
+            setStatusMessage({
+                success: false,
+                message: "Name can only contain letters and spaces",
+            });
             setLoading(false);
             return;
         }
@@ -62,9 +67,15 @@ export default function Signup() {
         });
 
         if (res.ok) {
-            setSuccess("Success! Check your email to verify your account.");
+            setStatusMessage({
+                success: true,
+                message: "Success! Check your email to verify your account.",
+            });
         } else {
-            setError((await res.json()).error);
+            setStatusMessage({
+                success: false,
+                message: (await res.json()).error || "Something went wrong",
+            });
         }
 
         setLoading(false);
@@ -144,16 +155,13 @@ export default function Signup() {
                 <div className="flex flex-col justify-center items-center w-full">
                     <Button type="submit" text="Sign up" loading={loading} />
 
-                    {error && (
-                        <div className="mt-4 text-red-500 text-center">
-                            <p>Error: {error}</p>
-                        </div>
-                    )}
-                    {success && (
-                        <div className="mt-4 text-green-500 text-center">
-                            <p>Success: {success}</p>
-                        </div>
-                    )}
+                    <p
+                        className={`text-center mt-4 text-${
+                            statusMessage.success ? "green-600" : "red-500"
+                        } fade-in ${statusMessage.message ? "opacity-100" : "opacity-0"}`}
+                    >
+                        {statusMessage.message}
+                    </p>
                 </div>
             </form>
 
