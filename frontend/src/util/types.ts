@@ -4,3 +4,13 @@ export default interface StandardResponse {
     message: string | null;
     error: string | null;
 }
+
+export interface Url {
+    id: string;
+    userId: string;
+    url: string;
+    createdAt: Date;
+    clicks: number;
+    comments: string | null;
+    lastClicked: Date;
+}
