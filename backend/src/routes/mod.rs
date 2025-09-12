@@ -8,18 +8,31 @@ pub mod urls;
 
 pub fn init_routes(cfg: &mut web::ServiceConfig) {
     let health_governor = GovernorConfigBuilder::default()
-        .requests_per_minute(120)
+        .requests_per_minute(10)
         .burst_size(10)
         .finish()
         .expect("Failed to create Governor config");
 
     let url_post_governor = GovernorConfigBuilder::default()
-        .requests_per_hour(10)
+        .requests_per_hour(30)
         .finish()
         .expect("Failed to create Governor config");
 
-    let auth_governor = GovernorConfigBuilder::default()
+    let me_governor = GovernorConfigBuilder::default()
+        .requests_per_minute(60)
+        .burst_size(30)
+        .finish()
+        .expect("Failed to create Governor config");
+
+    let login_governor = GovernorConfigBuilder::default()
+        .requests_per_hour(15)
+        .burst_size(10)
+        .finish()
+        .expect("Failed to create Governor config");
+
+    let account_management_governor = GovernorConfigBuilder::default()
         .requests_per_hour(30)
+        .burst_size(10)
         .finish()
         .expect("Failed to create Governor config");
 
@@ -42,10 +55,18 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
     )
     .service(
         web::scope("/auth")
-            .wrap(Governor::new(&auth_governor))
+            .wrap(Governor::new(&me_governor))
+            .service(web::scope("/me").service(auth::me::me)),
+    )
+    .service(
+        web::scope("/auth")
+            .wrap(Governor::new(&login_governor))
             .service(web::scope("/login").service(auth::login::login))
-            .service(web::scope("/logout").service(auth::logout::logout))
-            .service(web::scope("/me").service(auth::me::me))
+            .service(web::scope("/logout").service(auth::logout::logout)),
+    )
+    .service(
+        web::scope("/auth")
+            .wrap(Governor::new(&account_management_governor))
             .service(web::scope("/verify").service(auth::verify::verify))
             .service(web::scope("/verify-reset").service(auth::verify_reset::verify))
             .service(web::scope("/request-reset").service(auth::request_reset::request_reset))
