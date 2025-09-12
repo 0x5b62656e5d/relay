@@ -1,7 +1,14 @@
 use crate::{response::make_query_response, util::token::decode_token, validate_path};
 use actix_web::{HttpRequest, HttpResponse, get, web};
-use entity::urls;
+use entity::{clicks, urls};
 use sea_orm::{ColumnTrait, DatabaseConnection, DbErr, EntityTrait, QueryFilter};
+use serde::Serialize;
+
+#[derive(Serialize)]
+struct UrlData {
+    url_data: urls::Model,
+    clicks: Vec<clicks::Model>,
+}
 
 #[get("/{url_id}")]
 pub async fn get_url_data(
@@ -42,7 +49,23 @@ pub async fn get_url_data(
         .await;
 
     match url {
-        Ok(Some(url)) => HttpResponse::Ok().json(make_query_response(true, Some(&url), None, None)),
+        Ok(Some(url)) => {
+            let clicks: Vec<clicks::Model> = clicks::Entity::find()
+                .filter(clicks::Column::UrlId.eq(url.id.clone()))
+                .all(db.get_ref())
+                .await
+                .unwrap();
+
+            HttpResponse::Ok().json(make_query_response(
+                true,
+                Some(&UrlData {
+                    url_data: url,
+                    clicks,
+                }),
+                None,
+                None,
+            ))
+        }
         Ok(None) => HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,

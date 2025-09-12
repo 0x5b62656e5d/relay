@@ -5,7 +5,7 @@ use crate::{
 };
 use actix_web::{HttpRequest, HttpResponse, get, post, web};
 use chrono::Utc;
-use entity::urls;
+use entity::{clicks, urls};
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, DatabaseConnection, DbErr, EntityTrait, FromQueryResult,
     QuerySelect,
@@ -49,6 +49,17 @@ pub async fn get_url(
 
             if let Err(e) = active_url.update(db.get_ref()).await {
                 log::error!("Failed to update URL clicks: {}", e);
+            }
+
+            let active_click: clicks::ActiveModel = clicks::ActiveModel {
+                id: Set(cuid2::create_id()),
+                url_id: Set(url.id.clone()),
+                clicked_at: Set(Utc::now().naive_utc()),
+                ..Default::default()
+            };
+
+            if let Err(e) = active_click.insert(db.get_ref()).await {
+                log::error!("Failed to insert click record: {}", e);
             }
 
             HttpResponse::Ok().json(make_query_response(true, Some(&url.url), None, None))
