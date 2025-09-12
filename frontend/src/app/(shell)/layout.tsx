@@ -2,7 +2,7 @@
 import { createContext, useEffect, useState } from "react";
 
 import { Button } from "@/app/components/Button";
-import { RiLogoutBoxLine, RiLoginBoxLine, RiGithubFill } from "@remixicon/react";
+import { RiLogoutBoxLine, RiLoginBoxLine, RiGithubFill, RiBarChartFill } from "@remixicon/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -50,7 +50,19 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
     return (
         <>
-            <header className="w-full flex justify-center items-center gap-[20px] absolute top-0 mt-6">
+            <header className="w-full flex justify-center items-center gap-[20px] relative mt-6">
+                <div className="absolute left-6 top-[-4px] z-10">
+                    {userState.loggedIn && (
+                        <Button type="button" className="flex justify-center items-center">
+                            <Link
+                                href="/dashboard"
+                                className="flex justify-center items-center gap-2 relative z-10"
+                            >
+                                <RiBarChartFill /> Dashboard
+                            </Link>
+                        </Button>
+                    )}
+                </div>
                 <h1 className="text-4xl font-bold">
                     <Link href="/" className="relative z-10">
                         Relay
@@ -82,7 +94,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                     {children}
                 </UserContext.Provider>
             </div>
-            <footer className="w-full flex justify-center items-center gap-[20px] absolute bottom-0 mb-6">
+            <footer className="w-full flex justify-center items-center gap-[20px] relative mb-6">
                 <p className="text-sm w-fit">Made with a pinch of Pepper</p>
                 <a href="https://github.com/0x5b62656e5d/relay" target="_blank">
                     <RiGithubFill />
