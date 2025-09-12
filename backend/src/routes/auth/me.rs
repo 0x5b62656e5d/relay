@@ -14,6 +14,14 @@ pub struct MeResponse {
 #[post("")]
 pub async fn me(req: HttpRequest, db: web::Data<DatabaseConnection>) -> HttpResponse {
     let token = match req.cookie("__Host-access") {
+        Some(c) if c.value().is_empty() => {
+            return HttpResponse::Unauthorized().json(make_query_response::<()>(
+                false,
+                None,
+                None,
+                Some("Missing token cookie"),
+            ));
+        }
         Some(c) => c.value().to_string(),
         None => {
             return HttpResponse::Unauthorized().json(make_query_response::<()>(
@@ -46,12 +54,22 @@ pub async fn me(req: HttpRequest, db: web::Data<DatabaseConnection>) -> HttpResp
         ));
     }
 
-    let user: users::Model = users::Entity::find()
+    let user: Option<users::Model> = users::Entity::find()
         .filter(users::Column::Id.eq(decoded.claims.sub))
         .one(db.get_ref())
         .await
-        .unwrap()
         .unwrap();
+
+    if let None = user {
+        return HttpResponse::NotFound().json(make_query_response::<()>(
+            false,
+            None,
+            None,
+            Some("User not found"),
+        ));
+    }
+
+    let user: users::Model = user.unwrap();
 
     let res: MeResponse = MeResponse {
         id: user.id,

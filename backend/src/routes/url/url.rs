@@ -81,6 +81,15 @@ pub async fn create_url(
         let id: String = generate_nanoid();
 
         let new_url: urls::ActiveModel = match token.clone() {
+            Some(t) if t.value().is_empty() => urls::ActiveModel {
+                id: sea_orm::ActiveValue::Set(id.clone()),
+                url: sea_orm::ActiveValue::Set(body.url.clone()),
+                clicks: sea_orm::ActiveValue::Set(0),
+                created_at: sea_orm::ActiveValue::Set(Utc::now().naive_utc()),
+                comments: sea_orm::ActiveValue::Set(None),
+                user_id: sea_orm::ActiveValue::Set(None),
+                ..Default::default()
+            },
             Some(t) => {
                 let decoded = decode_token(t.value().to_string());
 
@@ -93,7 +102,7 @@ pub async fn create_url(
                     user_id: sea_orm::ActiveValue::Set(Some(decoded.unwrap().claims.sub)),
                     ..Default::default()
                 }
-            },
+            }
             None => urls::ActiveModel {
                 id: sea_orm::ActiveValue::Set(id.clone()),
                 url: sea_orm::ActiveValue::Set(body.url.clone()),
