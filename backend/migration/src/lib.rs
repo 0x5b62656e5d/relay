@@ -8,6 +8,7 @@ mod m20250903_092811_migration5;
 mod m20250908_013100_migration7;
 mod m20250909_013951_migration8;
 mod m20250911_004238_migration9;
+mod m20250912_130856_migration10;
 
 pub struct Migrator;
 
@@ -23,6 +24,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20250908_013100_migration7::Migration),
             Box::new(m20250909_013951_migration8::Migration),
             Box::new(m20250911_004238_migration9::Migration),
+            Box::new(m20250912_130856_migration10::Migration),
         ]
     }
 }
