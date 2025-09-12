@@ -19,8 +19,7 @@ export default function Login() {
         success: null,
         message: null,
     });
-    const router = useRouter();
-    const { userState, setUserState } = useContext(UserContext);
+    const { setUserState } = useContext(UserContext);
 
     useEffect(() => {
         (async () => {
@@ -32,7 +31,6 @@ export default function Login() {
             });
 
             if (res.ok) {
-                // router.refresh();
                 redirect("/dashboard");
             }
         })();

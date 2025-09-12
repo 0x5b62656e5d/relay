@@ -46,14 +46,6 @@ export default function Signup() {
             return;
         }
 
-        // const res = await signup(formData.email, formData.name, formData.password).then(res => {
-        //     if (res.error) {
-        //         setError(res.error);
-        //     } else {
-        //         setSuccess(res.message);
-        //     }
-        // });
-
         const res = await fetch("/api/auth/signup", {
             method: "POST",
             headers: {
