@@ -49,7 +49,7 @@ export default function Home() {
         <div className="flex flex-col justify-center items-center load-in">
             <h1 className="text-4xl font-bold">Relay</h1>
             <p className="mt-4 text-lg">A URL shortener built with NextJS and Rust</p>
-            <p className="mt-2 text-m">All URL&apos;s expire in 14 days!</p>
+            <p className="mt-2 text-m">All URL&apos;s expire 30 days after their last click!</p>
 
             <div className="mt-6">
                 <form
