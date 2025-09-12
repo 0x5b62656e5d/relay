@@ -42,7 +42,7 @@ pub async fn create_account(
         ..Default::default()
     };
 
-    if let Err(e) = user.insert(db.get_ref()).await {
+    if let Err(e) = user.clone().insert(db.get_ref()).await {
         if e.to_string().contains("duplicate key value") {
             return HttpResponse::Conflict().json(make_query_response::<()>(
                 false,
@@ -64,8 +64,9 @@ pub async fn create_account(
         format!("{} <{}>", body.name.clone(), body.email.clone()).as_str(),
         "Verify your Relay account",
         format!(
-            "<h1>Verify your Relay account</h1><p>Verify your email address with key: {}",
-            verification_key
+            "<h1>Verify your Relay account</h1><p>Verify your email address with key: {}</p><br><p>If this key is expired, request one <a href=\"https://relay.pepper.fyi/request-verify/{}\">here</a>.</p>",
+            verification_key,
+            user.id.clone().unwrap()
         ) //TODO: add proper link and format HTML body
         .as_str(),
     ) {
