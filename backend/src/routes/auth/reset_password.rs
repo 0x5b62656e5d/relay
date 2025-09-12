@@ -75,7 +75,7 @@ pub async fn reset_password(
     };
 
     if let Err(e) = active_user.update(db.get_ref()).await {
-        eprintln!("Couldn't update user's db info: {:?}", e);
+        log::error!("Couldn't update user's db info: {:?}", e);
 
         return HttpResponse::InternalServerError().json(make_query_response::<()>(
             false,

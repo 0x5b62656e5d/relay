@@ -71,7 +71,7 @@ pub async fn verify(
     };
 
     if let Err(e) = active_user.update(db.get_ref()).await {
-        eprintln!("Could update user's email verification key: {:?}", e);
+        log::error!("Could update user's email verification key: {:?}", e);
 
         return HttpResponse::InternalServerError().json(make_query_response::<()>(
             false,

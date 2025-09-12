@@ -54,7 +54,7 @@ pub async fn request_reset(
     };
 
     if let Err(e) = active_user.update(db.get_ref()).await {
-        eprintln!("Couldn't not update user's reset verification key: {:?}", e);
+        log::error!("Couldn't not update user's reset verification key: {:?}", e);
 
         return HttpResponse::InternalServerError().json(make_query_response::<()>(
             false,
@@ -75,7 +75,7 @@ pub async fn request_reset(
     ) {
         Ok(_) => HttpResponse::Ok().json(make_query_response::<()>(true, None, None, None)),
         Err(e) => {
-            eprintln!("Could not send email: {:?}", e);
+            log::error!("Could not send email: {:?}", e);
 
             HttpResponse::InternalServerError().json(make_query_response::<()>(
                 false,

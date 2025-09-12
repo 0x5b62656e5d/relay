@@ -51,7 +51,7 @@ pub async fn delete_account(
     };
 
     if let Err(e) = active_user.delete(db.get_ref()).await {
-        eprintln!("Failed to delete user: {:?}", e);
+        log::error!("Failed to delete user: {:?}", e);
 
         return HttpResponse::InternalServerError().json(make_query_response::<()>(
             false,

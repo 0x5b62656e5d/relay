@@ -58,6 +58,8 @@ pub async fn request_verify(
     };
 
     if let Err(e) = active_user.update(db.get_ref()).await {
+        log::error!("Could not update user: {:?}", e);
+
         return HttpResponse::InternalServerError().json(make_query_response::<()>(
             false,
             None,
@@ -78,7 +80,7 @@ pub async fn request_verify(
     ) {
         Ok(_) => HttpResponse::Ok().json(make_query_response::<()>(true, None, None, None)),
         Err(e) => {
-            eprintln!("Could not send email: {:?}", e);
+            log::error!("Could not send email: {:?}", e);
 
             HttpResponse::InternalServerError().json(make_query_response::<()>(
                 false,

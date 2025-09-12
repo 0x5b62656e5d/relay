@@ -72,7 +72,7 @@ pub async fn create_account(
     ) {
         Ok(_) => HttpResponse::Ok().json(make_query_response::<()>(true, None, None, None)),
         Err(e) => {
-            eprintln!("Could not send email: {:?}", e);
+            log::error!("Could not send email: {:?}", e);
 
             HttpResponse::InternalServerError().json(make_query_response::<()>(
                 false,
