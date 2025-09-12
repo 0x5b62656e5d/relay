@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import api from "@/util/api";
 
 const montserrat = Montserrat({
     variable: "--font-montserrat",
@@ -12,7 +11,6 @@ export const metadata: Metadata = {
     title: "Relay",
     description: "A URL shortener built with NextJS and Rust",
 };
-
 
 export default async function RootLayout({
     children,

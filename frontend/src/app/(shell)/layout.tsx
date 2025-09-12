@@ -1,9 +1,10 @@
 "use client";
+import { createContext, useEffect, useState } from "react";
+
+import { Button } from "@/app/components/Button";
 import { RiLogoutBoxLine, RiLoginBoxLine, RiGithubFill } from "@remixicon/react";
 import Link from "next/link";
-import { createContext, useEffect, useState } from "react";
-import { Button } from "../components/Button";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 const UserContext = createContext<{
     userState: { name: string | null; loggedIn: boolean };

@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
+
 import { Button } from "@/app/components/Button";
 import { StatusMessage } from "@/util/types";
+import Link from "next/link";
 
 interface SignupType {
     email: string;

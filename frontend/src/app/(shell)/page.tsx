@@ -1,8 +1,9 @@
 "use client";
-import { RiClipboardLine } from "@remixicon/react";
 import { useState } from "react";
+
 import { Button } from "@/app/components/Button";
 import { StatusMessage } from "@/util/types";
+import { RiClipboardLine } from "@remixicon/react";
 
 export default function Home() {
     const [shortenedUrl, setShortenedUrl] = useState<string | null>(null);

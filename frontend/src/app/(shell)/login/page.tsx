@@ -1,11 +1,11 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
+
+import { UserContext } from "@/app/(shell)/layout";
+import { Button } from "@/app/components/Button";
+import { StatusMessage } from "@/util/types";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Button } from "@/app/components/Button";
-import { useRouter } from "next/navigation";
-import { UserContext } from "../layout";
-import { StatusMessage } from "@/util/types";
 
 interface LoginType {
     email: string;
@@ -127,7 +127,7 @@ export default function Login() {
             </form>
             <div className="flex flex-col justify-center items-center gap-2">
                 <div className="flex flex-col justify-center items-center gap-1">
-                    <p>Don't have an account?</p>
+                    <p>Don&apos;t have an account?</p>
                     <p>
                         Create one{" "}
                         <Link href="/signup">

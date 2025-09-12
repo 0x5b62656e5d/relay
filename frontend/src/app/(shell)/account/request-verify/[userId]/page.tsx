@@ -1,7 +1,8 @@
 "use client";
+import { useEffect, useState } from "react";
+
 import { StatusMessage } from "@/util/types";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function RequestVerify() {
     const { userId } = useParams();

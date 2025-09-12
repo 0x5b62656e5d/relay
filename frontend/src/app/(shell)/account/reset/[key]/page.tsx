@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { redirect, useParams } from "next/navigation";
+
 import { Button } from "@/app/components/Button";
 import { StatusMessage } from "@/util/types";
+import { useParams } from "next/navigation";
 
 interface LoginType {
     password: string;
@@ -35,7 +35,7 @@ export default function Login() {
                 });
             }
         })();
-    }, []);
+    }, [key]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });

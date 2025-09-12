@@ -1,6 +1,6 @@
 "use client";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 import { Url } from "@/util/types";
 import Link from "next/link";
 

@@ -1,7 +1,8 @@
 "use client";
+import { useState, useEffect } from "react";
+
 import { Url } from "@/util/types";
 import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
 
 export default function Page() {
     const { id } = useParams();

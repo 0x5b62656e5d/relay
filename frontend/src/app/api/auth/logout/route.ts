@@ -1,6 +1,6 @@
 import api from "@/util/api";
 import StandardResponse from "@/util/types";
-import axios, { AxiosHeaders } from "axios";
+import { AxiosHeaders, isAxiosError } from "axios";
 import { NextResponse } from "next/server";
 
 export async function POST() {
@@ -15,10 +15,10 @@ export async function POST() {
 
         return res;
     } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
+        if (isAxiosError(error) && error.response) {
             console.error("Error response from server:", error.response.data);
             if (error.response.status === 500) {
-                let response: StandardResponse = {
+                const response: StandardResponse = {
                     success: false,
                     message: "A server error occurred. Please try again later.",
                     data: null,
@@ -28,7 +28,7 @@ export async function POST() {
                 return NextResponse.json(response, { status: 500 });
             }
 
-            let response: StandardResponse = {
+            const response: StandardResponse = {
                 success: false,
                 message: null,
                 data: null,
@@ -39,7 +39,7 @@ export async function POST() {
         } else {
             console.error("Unexpected error:", error);
 
-            let response: StandardResponse = {
+            const response: StandardResponse = {
                 success: false,
                 message: null,
                 data: null,
