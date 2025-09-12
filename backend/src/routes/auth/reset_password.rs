@@ -31,7 +31,6 @@ pub async fn reset_password(
         .unwrap();
 
     if let None = user {
-        println!("none");
         return HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,

@@ -28,7 +28,6 @@ export async function POST(request: NextRequest, { params }: { params: { userId:
             (error.status ? error.status : 0) < 400 &&
             error.response
         ) {
-            console.log(error.response);
             let response: StandardResponse = {
                 success: false,
                 message: null,

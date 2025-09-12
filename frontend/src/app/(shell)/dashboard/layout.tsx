@@ -14,7 +14,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
             const json = await res.json();
             setUrl(json.data);
-            console.log(json.data);
         })();
     }, []);
 

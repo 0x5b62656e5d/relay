@@ -56,7 +56,6 @@ export default function Login() {
 
         if (!res.ok) {
             const json = await res.json();
-            console.log(json);
             setError(json.error);
             setLoading(false);
             return;

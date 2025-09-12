@@ -61,8 +61,6 @@ export default function Signup() {
             }),
         });
 
-        console.log(res);
-
         if (res.ok) {
             setSuccess("Success! Check your email to verify your account.");
         } else {

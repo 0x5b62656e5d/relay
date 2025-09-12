@@ -23,7 +23,6 @@ pub async fn verify(
         .unwrap();
 
     if let None = user {
-        println!("none");
         return HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,

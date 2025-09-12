@@ -82,7 +82,6 @@ pub async fn create_url(
 
         let new_url: urls::ActiveModel = match token.clone() {
             Some(t) => {
-                println!("decoding");
                 let decoded = decode_token(t.value().to_string());
 
                 urls::ActiveModel {
