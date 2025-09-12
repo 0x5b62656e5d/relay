@@ -34,7 +34,7 @@ export async function POST(request: NextRequest, { params }: { params: { key: st
 
         return NextResponse.json(res.data, { status: 200 });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         if (
             axios.isAxiosError(error) &&
             (error.status ? error.status : 0) < 400 &&

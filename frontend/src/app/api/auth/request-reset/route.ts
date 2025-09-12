@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
         const response = await api.post("/auth/request-reset", { email });
         return NextResponse.json(response.data, { status: 200 });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         if (
             axios.isAxiosError(error) &&
             (error.status ? error.status : 0) < 400 &&

@@ -18,7 +18,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
         return NextResponse.json(res.data, { status: 200 });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         if (axios.isAxiosError(error) && error.status === 404) {
             let response: StandardResponse = {
                 success: false,
