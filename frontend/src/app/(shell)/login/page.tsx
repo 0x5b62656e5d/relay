@@ -124,12 +124,21 @@ export default function Login() {
                 )}
             </form>
             <div className="flex flex-col justify-center items-center gap-2">
-                <p>Don't have an account?</p>
+                <div className="flex flex-col justify-center items-center gap-1">
+                    <p>Don't have an account?</p>
+                    <p>
+                        Create one{" "}
+                        <Link href="/signup">
+                            <b>
+                                <u>here</u>
+                            </b>
+                        </Link>
+                    </p>
+                </div>
                 <p>
-                    Create one{" "}
-                    <Link href="/signup">
+                    <Link href="/account/request-reset">
                         <b>
-                            <u>here</u>
+                            <u>Forgot password?</u>
                         </b>
                     </Link>
                 </p>
