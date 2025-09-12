@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
             { ...(await request.json()) },
             {
                 headers: {
-                    Cookie: `__Host-access=${cookieValue.value ?? ""}`,
+                    Cookie: `__Host-access=${cookieValue?.value ?? ""}`,
                 },
             },
         );

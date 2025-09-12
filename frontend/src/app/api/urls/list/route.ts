@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 
         const res = await api.get("/urls/list", {
             headers: {
-                Cookie: `__Host-access=${cookieValue.value ?? ""}`,
+                Cookie: `__Host-access=${cookieValue?.value ?? ""}`,
             },
         });
 

@@ -12,7 +12,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
         const res = await api.get(`/urls/${id}`, {
             headers: {
-                Cookie: `__Host-access=${cookieValue.value ?? ""}`,
+                Cookie: `__Host-access=${cookieValue?.value ?? ""}`,
             },
         });
 
