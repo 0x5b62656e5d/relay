@@ -40,39 +40,73 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
         web::scope("/health")
             .wrap(Governor::new(&health_governor))
             .service(health::health),
-    )
-    .service(
+    );
+
+    cfg.service(
         web::scope("/url").service(url::url::get_url).service(
             web::scope("")
                 .wrap(Governor::new(&url_post_governor))
                 .service(url::url::create_url),
         ),
-    )
-    .service(
+    );
+
+    cfg.service(
         web::scope("/urls")
             .service(web::scope("/list").service(urls::list::list_url))
             .service(web::scope("").service(urls::url::get_url_data)),
-    )
-    .service(
+    );
+
+    cfg.service(
         web::scope("/auth")
-            .wrap(Governor::new(&me_governor))
-            .service(web::scope("/me").service(auth::me::me)),
-    )
-    .service(
-        web::scope("/auth")
-            .wrap(Governor::new(&login_governor))
-            .service(web::scope("/login").service(auth::login::login))
-            .service(web::scope("/logout").service(auth::logout::logout)),
-    )
-    .service(
-        web::scope("/auth")
-            .wrap(Governor::new(&account_management_governor))
-            .service(web::scope("/verify").service(auth::verify::verify))
-            .service(web::scope("/verify-reset").service(auth::verify_reset::verify))
-            .service(web::scope("/request-reset").service(auth::request_reset::request_reset))
-            .service(web::scope("/request-verify").service(auth::request_verify::request_verify))
-            .service(web::scope("/reset-password").service(auth::reset_password::reset_password))
-            .service(web::scope("/create-account").service(auth::create_account::create_account))
-            .service(web::scope("/delete-account").service(auth::delete_account::delete_account)),
+            .service(
+                web::scope("/me")
+                    .wrap(Governor::new(&me_governor))
+                    .service(auth::me::me),
+            )
+            .service(
+                web::scope("/login")
+                    .wrap(Governor::new(&login_governor))
+                    .service(auth::login::login),
+            )
+            .service(
+                web::scope("/logout")
+                    .wrap(Governor::new(&login_governor))
+                    .service(auth::logout::logout),
+            )
+            .service(
+                web::scope("/verify")
+                    .wrap(Governor::new(&account_management_governor))
+                    .service(auth::verify::verify),
+            )
+            .service(
+                web::scope("/verify-reset")
+                    .wrap(Governor::new(&account_management_governor))
+                    .service(auth::verify_reset::verify),
+            )
+            .service(
+                web::scope("/request-reset")
+                    .wrap(Governor::new(&account_management_governor))
+                    .service(auth::request_reset::request_reset),
+            )
+            .service(
+                web::scope("/request-verify")
+                    .wrap(Governor::new(&account_management_governor))
+                    .service(auth::request_verify::request_verify),
+            )
+            .service(
+                web::scope("/reset-password")
+                    .wrap(Governor::new(&account_management_governor))
+                    .service(auth::reset_password::reset_password),
+            )
+            .service(
+                web::scope("/create-account")
+                    .wrap(Governor::new(&account_management_governor))
+                    .service(auth::create_account::create_account),
+            )
+            .service(
+                web::scope("/delete-account")
+                    .wrap(Governor::new(&account_management_governor))
+                    .service(auth::delete_account::delete_account),
+            ),
     );
 }
