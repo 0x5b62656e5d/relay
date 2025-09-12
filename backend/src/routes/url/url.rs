@@ -42,6 +42,7 @@ pub async fn get_url(
             let active_url: urls::ActiveModel = urls::ActiveModel {
                 id: Set(url.id.clone()),
                 clicks: Set(url.clicks + 1),
+                last_clicked: Set(Some(Utc::now().naive_utc())),
                 ..Default::default()
             };
 
