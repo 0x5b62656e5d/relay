@@ -1,13 +1,14 @@
-use crate::util::generate_nanoid::generate_nanoid;
-use crate::util::token::decode_token;
-use crate::validate_body;
-use crate::{response::make_query_response, validate_path};
+use crate::{
+    response::make_query_response,
+    util::{generate_nanoid::generate_nanoid, token::decode_token},
+    validate_body, validate_path,
+};
 use actix_web::{HttpRequest, HttpResponse, get, post, web};
 use chrono::Utc;
 use entity::urls;
-use sea_orm::ActiveValue::Set;
 use sea_orm::{
-    ActiveModelTrait, DatabaseConnection, DbErr, EntityTrait, FromQueryResult, QuerySelect,
+    ActiveModelTrait, ActiveValue::Set, DatabaseConnection, DbErr, EntityTrait, FromQueryResult,
+    QuerySelect,
 };
 use serde::{Deserialize, Serialize};
 
@@ -82,34 +83,34 @@ pub async fn create_url(
 
         let new_url: urls::ActiveModel = match token.clone() {
             Some(t) if t.value().is_empty() => urls::ActiveModel {
-                id: sea_orm::ActiveValue::Set(id.clone()),
-                url: sea_orm::ActiveValue::Set(body.url.clone()),
-                clicks: sea_orm::ActiveValue::Set(0),
-                created_at: sea_orm::ActiveValue::Set(Utc::now().naive_utc()),
-                comments: sea_orm::ActiveValue::Set(None),
-                user_id: sea_orm::ActiveValue::Set(None),
+                id: Set(id.clone()),
+                url: Set(body.url.clone()),
+                clicks: Set(0),
+                created_at: Set(Utc::now().naive_utc()),
+                comments: Set(None),
+                user_id: Set(None),
                 ..Default::default()
             },
             Some(t) => {
                 let decoded = decode_token(t.value().to_string());
 
                 urls::ActiveModel {
-                    id: sea_orm::ActiveValue::Set(id.clone()),
-                    url: sea_orm::ActiveValue::Set(body.url.clone()),
-                    clicks: sea_orm::ActiveValue::Set(0),
-                    created_at: sea_orm::ActiveValue::Set(Utc::now().naive_utc()),
-                    comments: sea_orm::ActiveValue::Set(None),
-                    user_id: sea_orm::ActiveValue::Set(Some(decoded.unwrap().claims.sub)),
+                    id: Set(id.clone()),
+                    url: Set(body.url.clone()),
+                    clicks: Set(0),
+                    created_at: Set(Utc::now().naive_utc()),
+                    comments: Set(None),
+                    user_id: Set(Some(decoded.unwrap().claims.sub)),
                     ..Default::default()
                 }
             }
             None => urls::ActiveModel {
-                id: sea_orm::ActiveValue::Set(id.clone()),
-                url: sea_orm::ActiveValue::Set(body.url.clone()),
-                clicks: sea_orm::ActiveValue::Set(0),
-                created_at: sea_orm::ActiveValue::Set(Utc::now().naive_utc()),
-                comments: sea_orm::ActiveValue::Set(None),
-                user_id: sea_orm::ActiveValue::Set(None),
+                id: Set(id.clone()),
+                url: Set(body.url.clone()),
+                clicks: Set(0),
+                created_at: Set(Utc::now().naive_utc()),
+                comments: Set(None),
+                user_id: Set(None),
                 ..Default::default()
             },
         };

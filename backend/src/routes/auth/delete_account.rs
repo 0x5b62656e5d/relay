@@ -1,9 +1,10 @@
+use crate::{response::make_query_response, validate_body};
 use actix_web::{HttpResponse, post, web};
 use entity::users;
-use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
+use sea_orm::{
+    ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter,
+};
 use serde::Deserialize;
-
-use crate::{response::make_query_response, validate_body};
 
 #[derive(Deserialize)]
 pub struct DeleteAccountBody {
@@ -45,7 +46,7 @@ pub async fn delete_account(
     }
 
     let active_user: users::ActiveModel = users::ActiveModel {
-        id: sea_orm::ActiveValue::Set(user.id),
+        id: Set(user.id),
         ..Default::default()
     };
 

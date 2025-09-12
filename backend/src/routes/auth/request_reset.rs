@@ -8,7 +8,9 @@ use crate::{
 };
 use actix_web::{HttpResponse, post, web};
 use entity::users;
-use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
+use sea_orm::{
+    ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter,
+};
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -43,9 +45,9 @@ pub async fn request_reset(
     let reset_key: String = generate_key();
 
     let active_user: users::ActiveModel = users::ActiveModel {
-        id: sea_orm::ActiveValue::Set(user.id.clone()),
-        reset_key: sea_orm::ActiveValue::Set(Some(hash_sha256_key(&reset_key))),
-        reset_key_expires: sea_orm::ActiveValue::Set(Some(
+        id: Set(user.id.clone()),
+        reset_key: Set(Some(hash_sha256_key(&reset_key))),
+        reset_key_expires: Set(Some(
             (chrono::Utc::now() + chrono::Duration::hours(1)).naive_utc(),
         )),
         ..Default::default()

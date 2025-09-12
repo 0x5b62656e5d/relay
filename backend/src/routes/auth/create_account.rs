@@ -9,7 +9,7 @@ use crate::{
 use actix_web::{HttpResponse, post, web};
 use cuid2;
 use entity::users;
-use sea_orm::{ActiveModelTrait, DatabaseConnection};
+use sea_orm::{ActiveModelTrait, ActiveValue::Set, DatabaseConnection};
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -31,12 +31,12 @@ pub async fn create_account(
     let verification_key: String = generate_key();
 
     let user: users::ActiveModel = users::ActiveModel {
-        id: sea_orm::ActiveValue::Set(cuid2::create_id()),
-        email: sea_orm::ActiveValue::Set(body.email.clone()),
-        password: sea_orm::ActiveValue::Set(Some(hashed_password)),
-        name: sea_orm::ActiveValue::Set(body.name.clone()),
-        verification_key: sea_orm::ActiveValue::Set(Some(hash_sha256_key(&verification_key))),
-        verification_key_expires: sea_orm::ActiveValue::Set(Some(
+        id: Set(cuid2::create_id()),
+        email: Set(body.email.clone()),
+        password: Set(Some(hashed_password)),
+        name: Set(body.name.clone()),
+        verification_key: Set(Some(hash_sha256_key(&verification_key))),
+        verification_key_expires: Set(Some(
             (chrono::Utc::now() + chrono::Duration::hours(1)).naive_utc(),
         )),
         ..Default::default()

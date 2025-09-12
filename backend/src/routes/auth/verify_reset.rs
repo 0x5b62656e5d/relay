@@ -1,13 +1,10 @@
-use actix_web::{HttpResponse, post, web};
-use entity::users;
-use sea_orm::{
-    ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter,
-};
-
 use crate::{
     response::make_query_response,
     util::generate_key::{compare_sha256_key, hash_sha256_key},
 };
+use actix_web::{HttpResponse, post, web};
+use entity::users;
+use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
 
 #[post("/{reset_key}")]
 pub async fn verify(

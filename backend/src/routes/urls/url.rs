@@ -1,5 +1,4 @@
-use crate::util::token::decode_token;
-use crate::{response::make_query_response, validate_path};
+use crate::{response::make_query_response, util::token::decode_token, validate_path};
 use actix_web::{HttpRequest, HttpResponse, get, web};
 use entity::urls;
 use sea_orm::{ColumnTrait, DatabaseConnection, DbErr, EntityTrait, QueryFilter};
