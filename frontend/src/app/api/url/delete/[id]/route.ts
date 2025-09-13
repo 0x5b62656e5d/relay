@@ -1,4 +1,5 @@
 import api from "@/util/api";
+import { handleAxiosError } from "@/util/axiosError";
 import StandardResponse from "@/util/types";
 import { isAxiosError } from "axios";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
@@ -25,25 +26,6 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
         return NextResponse.json(response, { status: 200 });
     } catch (error) {
-        if (isAxiosError(error) && error.response) {
-            console.error("Error response from server:", error.response.data);
-            const response: StandardResponse = {
-                success: false,
-                message: null,
-                data: null,
-                error: error.response.data.error || "An error occurred while deleting the URL",
-            };
-
-            return NextResponse.json(response, { status: error.response.status });
-        } else {
-            console.error("Unexpected error:", error);
-            const response: StandardResponse = {
-                success: false,
-                message: null,
-                data: null,
-                error: "An unexpected error occurred while deleting the URL",
-            };
-            return NextResponse.json(response, { status: 500 });
-        }
+        return handleAxiosError(error, "An error occurred while deleting the URL");
     }
 }
