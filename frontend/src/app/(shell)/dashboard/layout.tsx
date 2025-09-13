@@ -34,16 +34,19 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                     />
                     <span className="input-border" />
                 </div>
-                {url &&
-                    url.map(u => {
-                        if (u.url.includes(urlFilter) || u.id.includes(urlFilter)) {
-                            return (
-                                <Link key={u.id} href={`/dashboard/${u.id}`}>
-                                    {u.id} {u.url}
-                                </Link>
-                            );
-                        }
-                    })}
+                <div className="h-[70vh] flex flex-col gap-6 items-baseline overflow-y-auto scrollbar p-2">
+                    {url &&
+                        url.map(u => {
+                            if (u.url.includes(urlFilter) || u.id.includes(urlFilter)) {
+                                return (
+                                    <Link key={u.id} href={`/dashboard/${u.id}`}>
+                                        <p>{u.id}</p>
+                                        <p>{u.url}</p>
+                                    </Link>
+                                );
+                            }
+                        })}
+                </div>
             </div>
             {children}
         </div>

@@ -102,3 +102,8 @@ button:focus {
 .fade-in {
     transition: opacity 0.2s ease-in-out;
 }
+
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--button-bg) transparent;
+}
