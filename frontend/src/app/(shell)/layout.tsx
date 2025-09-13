@@ -12,6 +12,15 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
         name: null,
         loggedIn: false,
     });
+    const [brokenStyling, setBrokenStyling] = useState(false);
+
+    const checkScreenWidth = () => {
+        if (window.innerWidth < 1024) {
+            setBrokenStyling(true);
+        } else {
+            setBrokenStyling(false);
+        }
+    };
 
     useEffect(() => {
         (async () => {
@@ -24,6 +33,13 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                 setUserState({ name: null, loggedIn: false });
             }
         })();
+
+        checkScreenWidth();
+        window.addEventListener("resize", checkScreenWidth);
+
+        return () => {
+            window.removeEventListener("resize", checkScreenWidth);
+        };
     }, []);
 
     const logoutClickHandler = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -86,11 +102,14 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                     {children}
                 </UserContext.Provider>
             </div>
-            <footer className="w-full flex justify-center items-center gap-[20px] relative mb-6">
-                <p className="text-sm w-fit">Made with a pinch of Pepper</p>
-                <a href="https://github.com/0x5b62656e5d/relay" target="_blank">
-                    <RiGithubFill />
-                </a>
+            <footer className="w-full flex flex-col justify-center items-center relative mb-6">
+                <div className="flex justify-center items-center gap-[20px]">
+                    <p className="text-sm w-fit">Made with a pinch of Pepper</p>
+                    <a href="https://github.com/0x5b62656e5d/relay" target="_blank">
+                        <RiGithubFill />
+                    </a>
+                </div>
+                {brokenStyling && <p className="text-sm">Styles may break on mobile/vertical screens</p>}
             </footer>
         </>
     );
