@@ -11,8 +11,8 @@ pub async fn count_url(req: HttpRequest, db: web::Data<DatabaseConnection>) -> H
             return HttpResponse::Unauthorized().json(make_query_response::<()>(
                 false,
                 None,
-                None,
                 Some("Missing token cookie"),
+                None,
             ));
         }
     };
@@ -23,8 +23,8 @@ pub async fn count_url(req: HttpRequest, db: web::Data<DatabaseConnection>) -> H
             return HttpResponse::Unauthorized().json(make_query_response::<()>(
                 false,
                 None,
-                None,
                 Some("Invalid token"),
+                None,
             ));
         }
     };

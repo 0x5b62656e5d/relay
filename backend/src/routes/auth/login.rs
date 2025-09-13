@@ -39,8 +39,8 @@ pub async fn login(
         return HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,
-            None,
             Some("User not found"),
+            None,
         ));
     }
 
@@ -54,8 +54,8 @@ pub async fn login(
         return HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,
-            None,
             Some("Incorrect email or password"),
+            None,
         ));
     }
 
@@ -63,8 +63,8 @@ pub async fn login(
         return HttpResponse::Forbidden().json(make_query_response::<()>(
             false,
             None,
-            None,
             Some("User account not verified"),
+            None,
         ));
     }
 

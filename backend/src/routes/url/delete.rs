@@ -17,8 +17,8 @@ pub async fn delete_url(
             return HttpResponse::Unauthorized().json(make_query_response::<()>(
                 false,
                 None,
-                None,
                 Some("Missing token cookie"),
+                None,
             ));
         }
     };
@@ -29,8 +29,8 @@ pub async fn delete_url(
             return HttpResponse::Unauthorized().json(make_query_response::<()>(
                 false,
                 None,
-                None,
                 Some("Invalid token"),
+                None,
             ));
         }
     };
@@ -46,8 +46,8 @@ pub async fn delete_url(
                 return HttpResponse::Unauthorized().json(make_query_response::<()>(
                     false,
                     None,
-                    None,
                     Some("You do not own this URL"),
+                    None,
                 ));
             }
 
@@ -57,8 +57,8 @@ pub async fn delete_url(
                 return HttpResponse::InternalServerError().json(make_query_response::<()>(
                     false,
                     None,
-                    None,
                     Some("Failed to delete URL"),
+                    None,
                 ));
             }
         }
@@ -66,16 +66,16 @@ pub async fn delete_url(
             return HttpResponse::NotFound().json(make_query_response::<()>(
                 false,
                 None,
-                None,
                 Some("URL not found"),
+                None,
             ));
         }
         Err(_) => {
             return HttpResponse::InternalServerError().json(make_query_response::<()>(
                 false,
                 None,
-                None,
                 Some("Internal server esrror"),
+                None,
             ));
         }
     }
