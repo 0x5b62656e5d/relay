@@ -9,7 +9,7 @@ pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: String,
     pub url_id: String,
-    pub clicked_at: DateTime,
+    pub clicked_at: DateTimeWithTimeZone,
     pub ip_address: Option<String>,
     pub user_agent: Option<String>,
 }

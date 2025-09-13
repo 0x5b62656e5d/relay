@@ -11,13 +11,13 @@ pub struct Model {
     pub name: String,
     #[sea_orm(unique)]
     pub email: String,
-    pub created_at: DateTime,
+    pub created_at: DateTimeWithTimeZone,
     pub banned: bool,
     pub reset_key: Option<String>,
-    pub reset_key_expires: Option<DateTime>,
-    pub last_reset: Option<DateTime>,
+    pub reset_key_expires: Option<DateTimeWithTimeZone>,
+    pub last_reset: Option<DateTimeWithTimeZone>,
     pub verification_key: Option<String>,
-    pub verification_key_expires: Option<DateTime>,
+    pub verification_key_expires: Option<DateTimeWithTimeZone>,
     pub verified: bool,
     pub password: Option<String>,
 }

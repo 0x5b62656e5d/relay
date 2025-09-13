@@ -9,11 +9,11 @@ pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub id: String,
     pub url: String,
-    pub created_at: DateTime,
+    pub created_at: DateTimeWithTimeZone,
     pub clicks: i32,
     #[sea_orm(column_type = "Text", nullable)]
     pub comments: Option<String>,
-    pub last_clicked: Option<DateTime>,
+    pub last_clicked: Option<DateTimeWithTimeZone>,
     pub user_id: Option<String>,
 }
 

@@ -43,7 +43,7 @@ pub async fn get_url(
             let active_url: urls::ActiveModel = urls::ActiveModel {
                 id: Set(url.id.clone()),
                 clicks: Set(url.clicks + 1),
-                last_clicked: Set(Some(Utc::now().naive_utc())),
+                last_clicked: Set(Some(Utc::now().fixed_offset())),
                 ..Default::default()
             };
 
@@ -54,7 +54,7 @@ pub async fn get_url(
             let active_click: clicks::ActiveModel = clicks::ActiveModel {
                 id: Set(cuid2::create_id()),
                 url_id: Set(url.id.clone()),
-                clicked_at: Set(Utc::now().naive_utc()),
+                clicked_at: Set(Utc::now().fixed_offset()),
                 ..Default::default()
             };
 
@@ -97,7 +97,7 @@ pub async fn create_url(
                 id: Set(id.clone()),
                 url: Set(body.url.clone()),
                 clicks: Set(0),
-                created_at: Set(Utc::now().naive_utc()),
+                created_at: Set(Utc::now().fixed_offset()),
                 comments: Set(None),
                 user_id: Set(None),
                 ..Default::default()
@@ -109,7 +109,7 @@ pub async fn create_url(
                     id: Set(id.clone()),
                     url: Set(body.url.clone()),
                     clicks: Set(0),
-                    created_at: Set(Utc::now().naive_utc()),
+                    created_at: Set(Utc::now().fixed_offset()),
                     comments: Set(None),
                     user_id: Set(Some(decoded.unwrap().claims.sub)),
                     ..Default::default()
@@ -119,7 +119,7 @@ pub async fn create_url(
                 id: Set(id.clone()),
                 url: Set(body.url.clone()),
                 clicks: Set(0),
-                created_at: Set(Utc::now().naive_utc()),
+                created_at: Set(Utc::now().fixed_offset()),
                 comments: Set(None),
                 user_id: Set(None),
                 ..Default::default()

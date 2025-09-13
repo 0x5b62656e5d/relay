@@ -37,7 +37,7 @@ pub async fn verify(
             Some("User is banned"),
             None,
         ));
-    } else if user.reset_key_expires.unwrap() < chrono::Utc::now().naive_utc() {
+    } else if user.reset_key_expires.unwrap() < chrono::Utc::now().fixed_offset() {
         return HttpResponse::BadRequest().json(make_query_response::<()>(
             false,
             None,

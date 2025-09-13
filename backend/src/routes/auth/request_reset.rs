@@ -48,7 +48,7 @@ pub async fn request_reset(
         id: Set(user.id.clone()),
         reset_key: Set(Some(hash_sha256_key(&reset_key))),
         reset_key_expires: Set(Some(
-            (chrono::Utc::now() + chrono::Duration::hours(1)).naive_utc(),
+            (chrono::Utc::now() + chrono::Duration::hours(1)).fixed_offset(),
         )),
         ..Default::default()
     };

@@ -15,7 +15,7 @@ pub async fn start_cron_jobs(db: DatabaseConnection) {
 
         Box::pin(async move {
             urls::Entity::delete_many()
-                .filter(urls::Column::LastClicked.lt((Utc::now() - Duration::days(30)).naive_utc()))
+                .filter(urls::Column::LastClicked.lt((Utc::now() - Duration::days(30)).fixed_offset()))
                 .exec(&db)
                 .await
                 .unwrap_or_else(|err| {
