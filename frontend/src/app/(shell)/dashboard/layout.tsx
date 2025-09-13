@@ -34,7 +34,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                     />
                     <span className="input-border" />
                 </div>
-                <div className="h-[70vh] flex flex-col gap-6 items-baseline overflow-y-auto scrollbar p-2">
+                <div className="h-[70vh] flex flex-col gap-6 items-baseline overflow-y-auto p-2">
                     {url &&
                         url.map(u => {
                             if (u.url.includes(urlFilter) || u.id.includes(urlFilter)) {

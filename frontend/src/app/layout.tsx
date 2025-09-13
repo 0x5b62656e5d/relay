@@ -20,7 +20,7 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <body className={`${montserrat.variable} antialiased h-screen w-screen`}>
-                <div className="h-full w-full flex flex-col justify-center items-center load-in">
+                <div className="h-full w-full flex flex-col justify-center items-center load-in overflow-y-auto">
                     {children}
                 </div>
             </body>
