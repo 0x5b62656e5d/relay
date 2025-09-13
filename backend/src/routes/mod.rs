@@ -4,7 +4,6 @@ use actix_web::web;
 pub mod auth;
 pub mod health;
 pub mod url;
-pub mod urls;
 
 pub fn init_routes(cfg: &mut web::ServiceConfig) {
     let health_governor = GovernorConfigBuilder::default()
@@ -67,27 +66,27 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
             .service(
                 web::scope("/list")
                     .wrap(Governor::new(&url_get_governor))
-                    .service(urls::list::list_url),
+                    .service(url::list::list_url),
             )
             .service(
                 web::scope("/data")
                     .wrap(Governor::new(&url_get_governor))
-                    .service(urls::url::get_url_data),
+                    .service(url::url_data::get_url_data),
             )
             .service(
                 web::scope("/count")
                     .wrap(Governor::new(&url_get_governor))
-                    .service(urls::count::count_url),
+                    .service(url::count::count_url),
             )
             .service(
                 web::scope("/comment")
                     .wrap(Governor::new(&url_management_governor))
-                    .service(urls::comment::update_comment),
+                    .service(url::comment::update_comment),
             )
             .service(
                 web::scope("/delete")
                     .wrap(Governor::new(&url_management_governor))
-                    .service(urls::delete::delete_url),
+                    .service(url::delete::delete_url),
             ),
     );
 
