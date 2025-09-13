@@ -1,19 +1,11 @@
 "use client";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/app/components/Button";
+import { UserContext } from "@/app/context/UserContext";
 import { RiLogoutBoxLine, RiLoginBoxLine, RiGithubFill, RiBarChartFill } from "@remixicon/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-
-const UserContext = createContext<{
-    userState: { name: string | null; loggedIn: boolean };
-    setUserState: React.Dispatch<React.SetStateAction<{ name: string | null; loggedIn: boolean }>>;
-}>({
-    userState: { name: null, loggedIn: false },
-    setUserState: () => {},
-});
-export { UserContext };
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     const [userState, setUserState] = useState<{ name: string | null; loggedIn: boolean }>({

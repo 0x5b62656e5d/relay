@@ -3,7 +3,9 @@ import { handleAxiosError } from "@/util/axiosError";
 import StandardResponse from "@/util/types";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest, { params }: { params: { key: string } }) {
+type Params = Promise<{ key: string }>;
+
+export async function POST(request: NextRequest, { params }: { params: Params }) {
     const { key } = await params;
     const { password } = (await request.json()) as { password: string };
 

@@ -4,7 +4,9 @@ import StandardResponse from "@/util/types";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+type Params = Promise<{ id: string }>;
+
+export async function DELETE(request: NextRequest, { params }: { params: Params }) {
     const { id } = await params;
 
     try {

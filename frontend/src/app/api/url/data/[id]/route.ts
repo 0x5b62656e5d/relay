@@ -3,7 +3,9 @@ import { handleAxiosError } from "@/util/axiosError";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+type Params = Promise<{ id: string }>;
+
+export async function GET(request: NextRequest, { params }: { params: Params }) {
     const { id } = await params;
 
     try {

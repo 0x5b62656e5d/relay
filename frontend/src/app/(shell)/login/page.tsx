@@ -1,8 +1,8 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
 
-import { UserContext } from "@/app/(shell)/layout";
 import { Button } from "@/app/components/Button";
+import { UserContext } from "@/app/context/UserContext";
 import { StatusMessage } from "@/util/types";
 import Link from "next/link";
 import { redirect } from "next/navigation";

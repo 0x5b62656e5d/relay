@@ -1,9 +1,11 @@
 import api from "@/util/api";
 import { handleAxiosError } from "@/util/axiosError";
 import StandardResponse from "@/util/types";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET({ params }: { params: { id: string } }) {
+type Params = Promise<{ id: string }>;
+
+export async function GET(request: NextRequest, { params }: { params: Params }) {
     const { id } = await params;
 
     try {

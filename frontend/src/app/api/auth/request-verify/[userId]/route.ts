@@ -3,7 +3,9 @@ import { handleAxiosError } from "@/util/axiosError";
 import StandardResponse from "@/util/types";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest, { params }: { params: { userId: string } }) {
+type Params = Promise<{ userId: string }>;
+
+export async function POST(request: NextRequest, { params }: { params: Params }) {
     const { userId } = await params;
 
     if (!userId) {
