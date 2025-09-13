@@ -1,17 +1,24 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/app/components/Button";
 import { StatusMessage } from "@/util/types";
-import { RiClipboardLine } from "@remixicon/react";
+import { RiClipboardLine, RiQrCodeLine } from "@remixicon/react";
+import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
 
 export default function Home() {
+    const [computedStyle, setComputedStyle] = useState<CSSStyleDeclaration | null>(null);
     const [shortenedUrl, setShortenedUrl] = useState<string | null>(null);
     const [copied, setCopied] = useState<boolean>(false);
+    const [showQr, setShowQr] = useState<boolean>(false);
     const [statusMessage, setStatusMessage] = useState<StatusMessage>({
         success: null,
         message: null,
     });
+
+    useEffect(() => {
+        setComputedStyle(window.getComputedStyle(document.documentElement));
+    }, []);
 
     const handleShorten = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -43,6 +50,10 @@ export default function Home() {
 
         navigator.clipboard.writeText(shortenedUrl);
         setCopied(true);
+    };
+
+    const showQrCode = () => {
+        setShowQr(true);
     };
 
     return (
@@ -84,19 +95,32 @@ export default function Home() {
                     <button onClick={copyToClipboard}>
                         <RiClipboardLine />
                     </button>
+                    <button onClick={showQrCode}>
+                        <RiQrCodeLine />
+                    </button>
                 </div>
                 <p
                     className={`text-[var(--copied)] mt-2 absolute bottom-[-2rem] fade-in ${
-                        copied ? "opacity-100" : "opacity-0"
-                    }`}
+                        copied ? "opacity-100 block" : "opacity-0 hidden"
+                    } `}
                 >
                     Copied to clipboard!
                 </p>
+                <div className={`mt-2 fade-in ${showQr ? "opacity-100 block" : "opacity-0 hidden"}`}>
+                    <QRCodeCanvas
+                        value={shortenedUrl ?? ""}
+                        bgColor={computedStyle?.getPropertyValue("--background").trim()}
+                        fgColor={computedStyle?.getPropertyValue("--foreground").trim()}
+                        marginSize={2}
+                        size={512}
+                        className="w-42! h-42!"
+                    />
+                </div>
             </div>
 
             <p
                 className={`text-center mt-4 text-red-500
-                    fade-in ${statusMessage.message ? "opacity-100" : "opacity-0"}`}
+                    fade-in ${statusMessage.message ? "opacity-100 block" : "opacity-0 hidden"}`}
             >
                 {statusMessage.message}
             </p>
