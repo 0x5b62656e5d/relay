@@ -5,14 +5,22 @@ export default interface StandardResponse {
     error: string | null;
 }
 
-export interface Url {
+export interface UrlData {
     id: string;
-    userId: string;
+    user_id: string;
     url: string;
-    createdAt: Date;
+    created_at: Date;
     clicks: number;
     comments: string | null;
-    lastClicked: Date;
+    last_clicked: Date;
+}
+
+export interface UrlClick {
+    id: string;
+    url_id: string;
+    clicked_at: Date;
+    user_agent: string;
+    ip_address: string;
 }
 
 export interface StatusMessage {
