@@ -23,7 +23,7 @@ export default function Home() {
     const handleShorten = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setStatusMessage({ success: null, message: null });
-        const res = await fetch("/api/url", {
+        const res = await fetch("/api/url/create", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

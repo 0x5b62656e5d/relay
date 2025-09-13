@@ -12,7 +12,7 @@ export default function Page() {
 
     useEffect(() => {
         (async () => {
-            const res = await fetch(`/api/url/${id}`, {
+            const res = await fetch(`/api/url/link/${id}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

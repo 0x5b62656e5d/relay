@@ -10,7 +10,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     try {
         const cookieValue = request.cookies.get("__Host-access") as RequestCookie;
 
-        const res = await api.get(`/urls/${id}`, {
+        const res = await api.get(`/url/data/${id}`, {
             headers: {
                 Cookie: `__Host-access=${cookieValue?.value ?? ""}`,
             },

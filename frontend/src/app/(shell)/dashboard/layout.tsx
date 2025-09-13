@@ -10,7 +10,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("/api/urls/list");
+            const res = await fetch("/api/url/list");
 
             const json = await res.json();
             setUrl(json.data);

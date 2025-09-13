@@ -7,7 +7,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     const { id } = await params;
 
     try {
-        const res = await api.get(`/url/${id}`);
+        const res = await api.get(`/url/link/${id}`);
 
         const response: StandardResponse = {
             success: true,

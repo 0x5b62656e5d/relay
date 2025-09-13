@@ -4,17 +4,28 @@ import { isAxiosError } from "axios";
 import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
     try {
         const cookieValue = request.cookies.get("__Host-access") as RequestCookie;
 
-        const res = await api.get("/urls/list", {
-            headers: {
-                Cookie: `__Host-access=${cookieValue?.value ?? ""}`,
+        const res = await api.post(
+            "/url/create",
+            { ...(await request.json()) },
+            {
+                headers: {
+                    Cookie: `__Host-access=${cookieValue?.value ?? ""}`,
+                },
             },
-        });
+        );
 
-        return NextResponse.json(res.data, { status: 200 });
+        const response: StandardResponse = {
+            success: true,
+            message: null,
+            data: { urlId: res.data.data },
+            error: null,
+        };
+
+        return NextResponse.json(response, { status: 200 });
     } catch (error) {
         if (isAxiosError(error) && error.response) {
             console.error("Error response from server:", error.response.data);

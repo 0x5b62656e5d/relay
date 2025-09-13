@@ -13,7 +13,12 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
         .finish()
         .expect("Failed to create Governor config");
 
-    let url_post_governor = GovernorConfigBuilder::default()
+    let url_get_governor = GovernorConfigBuilder::default()
+        .requests_per_minute(60)
+        .finish()
+        .expect("Failed to create Governor config");
+
+    let url_create_governor = GovernorConfigBuilder::default()
         .requests_per_hour(30)
         .finish()
         .expect("Failed to create Governor config");
@@ -43,17 +48,27 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
     );
 
     cfg.service(
-        web::scope("/url").service(url::url::get_url).service(
-            web::scope("")
-                .wrap(Governor::new(&url_post_governor))
-                .service(url::url::create_url),
-        ),
-    );
-
-    cfg.service(
-        web::scope("/urls")
-            .service(web::scope("/list").service(urls::list::list_url))
-            .service(web::scope("").service(urls::url::get_url_data)),
+        web::scope("/url")
+            .service(
+                web::scope("/create")
+                    .wrap(Governor::new(&url_create_governor))
+                    .service(url::url::create_url),
+            )
+            .service(
+                web::scope("/link")
+                    .wrap(Governor::new(&url_get_governor))
+                    .service(url::url::get_url),
+            )
+            .service(
+                web::scope("/list")
+                    .wrap(Governor::new(&url_get_governor))
+                    .service(urls::list::list_url),
+            )
+            .service(
+                web::scope("/data")
+                    .wrap(Governor::new(&url_get_governor))
+                    .service(urls::url::get_url_data),
+            ),
     );
 
     cfg.service(
