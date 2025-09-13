@@ -3,7 +3,7 @@ import { handleAxiosError } from "@/util/axiosError";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-    const { email, password } = await request.json();
+    const { email, password, name } = await request.json();
 
     try {
         const res = await api.post("/auth/create-account", {
