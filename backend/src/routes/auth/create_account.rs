@@ -64,10 +64,10 @@ pub async fn create_account(
         format!("{} <{}>", body.name.clone(), body.email.clone()).as_str(),
         "Verify your Relay account",
         format!(
-            "<h1>Verify your Relay account</h1><p>Verify your email address with key: {}</p><br><p>If this key is expired, request one <a href=\"https://relay.pepper.fyi/request-verify/{}\">here</a>.</p>",
+            "<h1>Verify your Relay account</h1><p>Verify your email address <a href=\"https://relay.pepper.fyi/account/verify/{}\">here</a>.</p><br><p>If this key is expired, request one <a href=\"https://relay.pepper.fyi/request-verify/{}\">here</a>.</p>",
             verification_key,
             user.id.clone().unwrap()
-        ) //TODO: add proper link and format HTML body
+        )
         .as_str(),
     ) {
         Ok(_) => HttpResponse::Ok().json(make_query_response::<()>(true, None, None, None)),
