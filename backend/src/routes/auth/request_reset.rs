@@ -68,9 +68,9 @@ pub async fn request_reset(
         format!("{} <{}>", user.name, user.email).as_str(),
         "Reset your Relay account password",
         format!(
-            "<h1>Reset your Relay account password</h1><p>Reset your password with key: {}",
+            "<h1>Reset your Relay account password</h1><p>Reset your password <a href=\"https://relay.pepper.fyi/account/reset/{}\">here</a>.</p>",
             reset_key
-        ) //TODO: add proper link and format HTML body
+        )
         .as_str(),
     ) {
         Ok(_) => HttpResponse::Ok().json(make_query_response::<()>(true, None, None, None)),
