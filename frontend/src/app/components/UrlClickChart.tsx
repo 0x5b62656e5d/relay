@@ -8,8 +8,8 @@ import {
     Title,
     Tooltip,
     Legend,
-    ChartData,
-    ChartOptions,
+    type ChartData,
+    type ChartOptions,
     BarElement,
 } from "chart.js";
 import "chartjs-adapter-date-fns";

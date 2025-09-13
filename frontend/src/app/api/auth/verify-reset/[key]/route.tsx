@@ -1,7 +1,6 @@
 import api from "@/util/api";
 import { handleAxiosError } from "@/util/axiosError";
 import StandardResponse from "@/util/types";
-import { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest, { params }: { params: { key: string } }) {

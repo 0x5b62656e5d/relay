@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/app/components/Button";
 import { StatusMessage } from "@/util/types";
 import { RiClipboardLine, RiQrCodeLine } from "@remixicon/react";
-import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
+import { QRCodeCanvas } from "qrcode.react";
 
 export default function Home() {
     const [computedStyle, setComputedStyle] = useState<CSSStyleDeclaration | null>(null);
@@ -106,7 +106,9 @@ export default function Home() {
                 >
                     Copied to clipboard!
                 </p>
-                <div className={`mt-2 fade-in ${showQr ? "opacity-100 block" : "opacity-0 hidden"}`}>
+                <div
+                    className={`mt-2 fade-in ${showQr ? "opacity-100 block" : "opacity-0 hidden"}`}
+                >
                     <QRCodeCanvas
                         value={shortenedUrl ?? ""}
                         bgColor={computedStyle?.getPropertyValue("--background").trim()}

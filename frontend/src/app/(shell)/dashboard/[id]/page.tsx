@@ -1,13 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 
-import { UrlClick, UrlData } from "@/util/types";
-import { useParams } from "next/navigation";
-import { formatDate } from "@/util/date";
 import { Button } from "@/app/components/Button";
 import { DashboardInfoCard } from "@/app/components/DashboardInfoCard";
-import { RiClipboardLine } from "@remixicon/react";
 import ClicksLineChart from "@/app/components/UrlClickChart";
+import { formatDate } from "@/util/date";
+import { UrlClick, UrlData } from "@/util/types";
+import { RiClipboardLine } from "@remixicon/react";
+import { useParams } from "next/navigation";
 
 export default function Page() {
     const { id } = useParams();
@@ -122,7 +122,12 @@ export default function Page() {
                     {/* <div className="w-full h-full grid grid-cols-[3fr_1fr] p-5 gap-4"> */}
                     <div className="h-full p-5">
                         <div className="h-full w-auto flex justify-center items-center">
-                            <ClicksLineChart clicks={url.url_clicks ? url.url_clicks : []} foreground={computedStyle?.getPropertyValue("--foreground").trim() as string} />
+                            <ClicksLineChart
+                                clicks={url.url_clicks ? url.url_clicks : []}
+                                foreground={
+                                    computedStyle?.getPropertyValue("--foreground").trim() as string
+                                }
+                            />
                         </div>
                         {/* <div className="w-full h-full bg-pink-800"></div> */}
                     </div>
