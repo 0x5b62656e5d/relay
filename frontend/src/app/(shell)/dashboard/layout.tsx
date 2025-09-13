@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 
-import { Url } from "@/util/types";
+import { UrlData } from "@/util/types";
 import Link from "next/link";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
-    const [url, setUrl] = useState<Array<Url> | null>(null);
+    const [url, setUrl] = useState<Array<UrlData>>([]);
     const [urlFilter, setUrlFilter] = useState<string>("");
 
     useEffect(() => {
