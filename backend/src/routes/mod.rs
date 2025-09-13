@@ -75,6 +75,11 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
                     .service(urls::url::get_url_data),
             )
             .service(
+                web::scope("/count")
+                    .wrap(Governor::new(&url_get_governor))
+                    .service(urls::count::count_url),
+            )
+            .service(
                 web::scope("/comment")
                     .wrap(Governor::new(&url_management_governor))
                     .service(urls::comment::update_comment),
