@@ -80,5 +80,5 @@ pub async fn delete_url(
         }
     }
 
-    HttpResponse::Ok().finish()
+    HttpResponse::Ok().json(make_query_response::<()>(true, None, None, None))
 }

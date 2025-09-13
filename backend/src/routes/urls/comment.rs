@@ -99,5 +99,5 @@ pub async fn update_comment(
         }
     }
 
-    HttpResponse::Ok().finish()
+    HttpResponse::Ok().json(make_query_response::<()>(true, None, None, None))
 }
