@@ -18,8 +18,8 @@ pub async fn me(req: HttpRequest, db: web::Data<DatabaseConnection>) -> HttpResp
             return HttpResponse::Unauthorized().json(make_query_response::<()>(
                 false,
                 None,
-                None,
                 Some("Missing token cookie"),
+                None,
             ));
         }
         Some(c) => c.value().to_string(),
@@ -27,8 +27,8 @@ pub async fn me(req: HttpRequest, db: web::Data<DatabaseConnection>) -> HttpResp
             return HttpResponse::Unauthorized().json(make_query_response::<()>(
                 false,
                 None,
-                None,
                 Some("Missing token cookie"),
+                None,
             ));
         }
     };
@@ -39,8 +39,8 @@ pub async fn me(req: HttpRequest, db: web::Data<DatabaseConnection>) -> HttpResp
             return HttpResponse::Unauthorized().json(make_query_response::<()>(
                 false,
                 None,
-                None,
                 Some("Invalid token"),
+                None,
             ));
         }
     };
@@ -49,8 +49,8 @@ pub async fn me(req: HttpRequest, db: web::Data<DatabaseConnection>) -> HttpResp
         return HttpResponse::Unauthorized().json(make_query_response::<()>(
             false,
             None,
-            None,
             Some("Token expired"),
+            None,
         ));
     }
 
@@ -64,8 +64,8 @@ pub async fn me(req: HttpRequest, db: web::Data<DatabaseConnection>) -> HttpResp
         return HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,
-            None,
             Some("User not found"),
+            None,
         ));
     }
 

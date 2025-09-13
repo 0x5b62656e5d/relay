@@ -24,8 +24,8 @@ pub async fn get_url_data(
             return HttpResponse::Unauthorized().json(make_query_response::<()>(
                 false,
                 None,
-                None,
                 Some("Missing token cookie"),
+                None,
             ));
         }
     };
@@ -36,8 +36,8 @@ pub async fn get_url_data(
             return HttpResponse::Unauthorized().json(make_query_response::<()>(
                 false,
                 None,
-                None,
                 Some("Invalid token"),
+                None,
             ));
         }
     };
