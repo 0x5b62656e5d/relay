@@ -1,0 +1,9 @@
+build
+coverage
+.next/**
+node_modules/**
+.gitignore
+next-env.d.ts
+pnpm-lock.yaml
+README.md
+package.json

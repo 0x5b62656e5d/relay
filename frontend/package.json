@@ -6,13 +6,18 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "prettier . --write && eslint . --fix"
   },
   "dependencies": {
     "@remixicon/react": "^4.6.0",
     "axios": "^1.10.0",
+    "chart.js": "^4.5.0",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "date-fns": "^4.1.0",
     "next": "15.4.2",
+    "qrcode.react": "^4.2.0",
     "react": "19.1.0",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "19.1.0"
   },
   "devDependencies": {
@@ -23,6 +28,9 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.4.2",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

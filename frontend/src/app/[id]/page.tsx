@@ -1,27 +1,40 @@
 "use client";
-import { getUrlById } from "@/util/api";
-import { redirect, useParams } from "next/navigation";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { Button } from "@/app/components/Button";
+import Link from "next/link";
+import { redirect, useParams } from "next/navigation";
+
 export default function Page() {
-    const params = useParams<{ id: string }>();
+    const { id } = useParams();
     const [url, setUrl] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         (async () => {
-            const fetchedData = await getUrlById(params.id);
+            const res = await fetch(`/api/url/link/${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!res.ok) {
+                setError("An error occurred while fetching the URL.");
+                return;
+            }
+
+            const fetchedData = await res.json();
 
             if (fetchedData.error) {
                 setError(fetchedData.error);
                 return;
             } else {
-                setUrl(fetchedData.url);
+                setUrl(fetchedData.data.url);
                 setError(null);
             }
         })();
-    }, [params.id]);
+    }, [id]);
 
     if (url !== "") {
         redirect(url);
@@ -35,9 +48,9 @@ export default function Page() {
                     <div className="mt-4 text-red-500">
                         <p>Error: {error}</p>
                     </div>
-                    <button className="mt-4 bg-[var(--button-bg)] text-[var(--button-fg)] px-4 py-2 rounded">
+                    <Button type="button" className="mt-4">
                         <Link href="/">Go home</Link>
-                    </button>
+                    </Button>
                 </>
             )}
         </>

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-    --background: #f0ead2;
+    --background: #f1eedf;
     --foreground: #262626;
     --button-bg: #a98467;
     --button-fg: #262626;
@@ -41,6 +41,8 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 
     overflow: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: var(--button-bg) transparent;
 }
 
 .load-in {
@@ -58,14 +60,14 @@ body {
     }
 }
 
-input.url-input {
+input {
     background-color: transparent;
     width: 100%;
     border: none;
     border-bottom: 1px solid #a69080;
 }
 
-span.input-border {
+input + span {
     position: absolute;
     background: #6c584c;
     width: 0%;
@@ -79,7 +81,7 @@ input:focus {
     outline: none;
 }
 
-input:focus ~ .input-border {
+input:focus + span {
     width: 100%;
 }
 
