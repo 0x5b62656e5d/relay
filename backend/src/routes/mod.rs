@@ -23,6 +23,11 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
         .finish()
         .expect("Failed to create Governor config");
 
+    let url_management_governor = GovernorConfigBuilder::default()
+        .requests_per_hour(60)
+        .finish()
+        .expect("Failed to create Governor config");
+
     let me_governor = GovernorConfigBuilder::default()
         .requests_per_minute(60)
         .burst_size(30)
@@ -68,6 +73,16 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
                 web::scope("/data")
                     .wrap(Governor::new(&url_get_governor))
                     .service(urls::url::get_url_data),
+            )
+            .service(
+                web::scope("/comment")
+                    .wrap(Governor::new(&url_management_governor))
+                    .service(urls::comment::update_comment),
+            )
+            .service(
+                web::scope("/delete")
+                    .wrap(Governor::new(&url_management_governor))
+                    .service(urls::delete::delete_url),
             ),
     );
 
