@@ -18,7 +18,11 @@ pub fn generate_key() -> String {
 pub fn hash_sha256_key(key: &str) -> String {
     let mut hasher = Sha256::new();
     hasher.update(key);
-    hasher.finalize().iter().map(|b| format!("{:02x}", b)).collect()
+    hasher
+        .finalize()
+        .iter()
+        .map(|b| format!("{:02x}", b))
+        .collect()
 }
 
 /// Compares a key to a hashed key
