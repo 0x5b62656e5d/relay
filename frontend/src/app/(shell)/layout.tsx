@@ -58,8 +58,8 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
     return (
         <>
-            <header className="w-full flex justify-center items-center gap-[20px] relative mt-6">
-                <div className="absolute left-6 top-[-4px] z-10">
+            <header className="w-full flex justify-between items-center gap-[20px] relative mt-6">
+                <div className="pl-6">
                     {userState.loggedIn && (
                         <Button type="button" className="flex justify-center items-center">
                             <Link
@@ -76,7 +76,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                         Relay
                     </Link>
                 </h1>
-                <div className="absolute right-6 top-[-4px] z-10">
+                <div className="pr-6">
                     {userState.loggedIn ? (
                         <Button
                             type="button"
@@ -109,7 +109,9 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                         <RiGithubFill />
                     </a>
                 </div>
-                {brokenStyling && <p className="text-sm">Styles may break on mobile/vertical screens</p>}
+                {brokenStyling && (
+                    <p className="text-sm">Styles may break on mobile/vertical screens</p>
+                )}
             </footer>
         </>
     );

@@ -6,8 +6,9 @@ import { DashboardInfoCard } from "@/app/components/DashboardInfoCard";
 import ClicksLineChart from "@/app/components/UrlClickChart";
 import { formatDate } from "@/util/date";
 import { UrlClick, UrlData } from "@/util/types";
-import { RiClipboardLine } from "@remixicon/react";
+import { RiClipboardLine, RiCloseLine, RiQrCodeLine } from "@remixicon/react";
 import { useParams } from "next/navigation";
+import { QRCodeCanvas } from "qrcode.react";
 
 export default function Page() {
     const { id } = useParams();
@@ -17,6 +18,7 @@ export default function Page() {
         url_clicks: null,
     });
     const [comment, setComment] = useState("");
+    const [showQrModal, setShowQrModal] = useState<boolean>(false);
 
     useEffect(() => {
         setComputedStyle(window.getComputedStyle(document.documentElement));
@@ -96,6 +98,9 @@ export default function Page() {
                                 <button onClick={copyToClipboard}>
                                     <RiClipboardLine />
                                 </button>
+                                <button onClick={() => setShowQrModal(true)}>
+                                    <RiQrCodeLine />
+                                </button>
                             </div>
                         </DashboardInfoCard>
                         <DashboardInfoCard title="Original URL">
@@ -159,6 +164,24 @@ export default function Page() {
             ) : (
                 <p>Loading...</p>
             )}
+            <div className={`modal ${showQrModal ? "modal-show" : ""} fade-in`}>
+                <div className="relative flex justify-center items-center p-12 rounded border border-white bg-[var(--background)] z-200">
+                    <QRCodeCanvas
+                        value={`https://relay.pepper.fyi/${url.url_data?.id}`}
+                        bgColor={`${computedStyle?.getPropertyValue("--background").trim()}00`}
+                        fgColor={computedStyle?.getPropertyValue("--foreground").trim()}
+                        marginSize={2}
+                        size={512}
+                        className="w-42! h-42! z-300"
+                    />
+                    <button
+                        className="absolute top-0 left-0 m-4 z-110"
+                        onClick={() => setShowQrModal(false)}
+                    >
+                        <RiCloseLine />
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }

@@ -52,11 +52,9 @@ body {
 @keyframes loadIn {
     0% {
         opacity: 0;
-        transform: translateY(20px);
     }
     100% {
         opacity: 1;
-        transform: translateY(0);
     }
 }
 
@@ -103,4 +101,35 @@ button:focus {
 
 .fade-in {
     transition: opacity 0.2s ease-in-out;
+}
+
+.modal {
+    position: fixed;
+    z-index: 100;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.modal.modal-show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.modal::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.35);
+    z-index: 170;
+    top: 0;
+    left: 0;
+    transition: all 0.2s ease-in-out;
+    backdrop-filter: blur(4px);
 }
