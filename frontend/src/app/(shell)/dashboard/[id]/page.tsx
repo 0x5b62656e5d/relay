@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/app/components/Button";
 import { DashboardInfoCard } from "@/app/components/DashboardInfoCard";
@@ -88,15 +88,6 @@ export default function Page() {
         }
     };
 
-    // const handleEscapeKeyModal = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    //     e.preventDefault();
-    //     console.log(e.key);
-
-    //     if (e.key === "Escape") {
-    //         setShowQrModal(false);
-    //     }
-    // };
-
     useEffect(() => {
         if (!showQrModal) {
             return;
@@ -114,10 +105,10 @@ export default function Page() {
     }, [showQrModal]);
 
     return (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="w-full xl:h-full flex justify-center items-center">
             {url ? (
-                <div className="h-[90%] w-[95%] grid grid-rows-[1fr_4fr_2fr] gap-4">
-                    <div className="w-full h-full flex flex-row justify-evenly items-center">
+                <div className="h-[90%] w-[95%] grid xl:grid-rows-[1fr_4fr_2fr] grid-rows-[1fr_2fr_1fr] gap-4">
+                    <div className="w-full h-full xl:flex xl:flex-row xl:gap-0 grid grid-rows-[1fr_1fr_1fr] grid-cols-[1fr_1fr] justify-evenly items-center gap-2">
                         <DashboardInfoCard title="URL ID">
                             <div className="flex justify-center items-center gap-1">
                                 <p>{url.url_data?.id} </p>
@@ -131,9 +122,6 @@ export default function Page() {
                         </DashboardInfoCard>
                         <DashboardInfoCard title="Original URL">
                             <p>{url.url_data?.url}</p>
-                        </DashboardInfoCard>
-                        <DashboardInfoCard title="Total clicks">
-                            <p>{url.url_data?.clicks}</p>
                         </DashboardInfoCard>
                         <DashboardInfoCard title="Created at">
                             <p>
@@ -149,8 +137,10 @@ export default function Page() {
                                     : "Never"}
                             </p>
                         </DashboardInfoCard>
+                        <DashboardInfoCard title="Total clicks" className="col-span-2">
+                            <p>{url.url_data?.clicks}</p>
+                        </DashboardInfoCard>
                     </div>
-                    {/* <div className="w-full h-full grid grid-cols-[3fr_1fr] p-5 gap-4"> */}
                     <div className="h-full p-5">
                         <div className="h-full w-auto flex justify-center items-center">
                             <ClicksLineChart
@@ -160,9 +150,8 @@ export default function Page() {
                                 }
                             />
                         </div>
-                        {/* <div className="w-full h-full bg-pink-800"></div> */}
                     </div>
-                    <div className="w-full h-full grid grid-cols-[3fr_1fr] p-5 gap-4">
+                    <div className="w-full h-full grid xl:grid-cols-[3fr_1fr] grid-rows-[1fr_1fr] p-5 gap-4">
                         <div className="w-full h-full flex flex-col gap-2">
                             <label htmlFor="comments">Comments</label>
                             <textarea

@@ -2,23 +2,37 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/app/components/Button";
-import { UserContext } from "@/app/context/UserContext";
-import { RiLogoutBoxLine, RiLoginBoxLine, RiGithubFill, RiBarChartFill } from "@remixicon/react";
+import { StateContext } from "@/app/context/StateContext";
+import {
+    RiBarChartFill,
+    RiGithubFill,
+    RiHome2Line,
+    RiLoginBoxLine,
+    RiLogoutBoxLine,
+} from "@remixicon/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import "@/app/(shell)/hamburger.css";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     const [userState, setUserState] = useState<{ name: string | null; loggedIn: boolean }>({
         name: null,
         loggedIn: false,
     });
-    const [brokenStyling, setBrokenStyling] = useState(false);
+    const [smallScreen, setSmallScreen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const checkScreenWidth = () => {
-        if (window.innerWidth < 1024) {
-            setBrokenStyling(true);
+        if (window.innerWidth < 1280) {
+            setSmallScreen(true);
         } else {
-            setBrokenStyling(false);
+            setSmallScreen(false);
+        }
+    };
+
+    const handleMenuClicks = (e: MouseEvent) => {
+        if (!(e.target as HTMLElement).classList.contains("hamburger-span")) {
+            setMenuOpen(false);
         }
     };
 
@@ -36,14 +50,17 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
         checkScreenWidth();
         window.addEventListener("resize", checkScreenWidth);
+        window.addEventListener("click", handleMenuClicks);
 
         return () => {
             window.removeEventListener("resize", checkScreenWidth);
+            window.removeEventListener("click", handleMenuClicks);
         };
     }, []);
 
     const logoutClickHandler = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
+        setMenuOpen(false);
 
         await fetch("/api/auth/logout", {
             method: "POST",
@@ -58,49 +75,107 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
     return (
         <>
-            <header className="w-full flex justify-between items-center gap-[20px] relative mt-6">
-                <div className="pl-6">
-                    {userState.loggedIn && (
-                        <Button type="button" className="flex justify-center items-center">
-                            <Link
-                                href="/dashboard"
-                                className="flex justify-center items-center gap-2 relative z-10"
-                            >
-                                <RiBarChartFill /> Dashboard
+            <header className="w-full xl:flex xl:justify-between xl:items-center gap-[20px] relative mt-6 mb-6">
+                {!smallScreen ? (
+                    <>
+                        <div className="pl-6">
+                            {userState.loggedIn && (
+                                <Button type="button" className="flex justify-center items-center">
+                                    <Link
+                                        href="/dashboard"
+                                        className="flex justify-center items-center gap-2 relative z-10"
+                                    >
+                                        <RiBarChartFill /> Dashboard
+                                    </Link>
+                                </Button>
+                            )}
+                        </div>
+                        <h1 className="text-4xl font-bold">
+                            <Link href="/" className="relative">
+                                Relay
                             </Link>
-                        </Button>
-                    )}
-                </div>
-                <h1 className="text-4xl font-bold">
-                    <Link href="/" className="relative">
-                        Relay
-                    </Link>
-                </h1>
-                <div className="pr-6">
-                    {userState.loggedIn ? (
-                        <Button
-                            type="button"
-                            className="flex justify-center items-center"
-                            onClick={logoutClickHandler}
-                        >
-                            <RiLogoutBoxLine /> Log out
-                        </Button>
-                    ) : (
-                        <Button type="button" className="flex justify-center items-center">
-                            <Link
-                                href="/login"
-                                className="flex justify-center items-center gap-2 relative"
+                        </h1>
+                        <div className="pr-6">
+                            {userState.loggedIn ? (
+                                <Button
+                                    type="button"
+                                    className="flex justify-center items-center"
+                                    onClick={logoutClickHandler}
+                                >
+                                    <RiLogoutBoxLine /> Log out
+                                </Button>
+                            ) : (
+                                <Button type="button" className="flex justify-center items-center">
+                                    <Link
+                                        href="/login"
+                                        className="flex justify-center items-center gap-2 relative"
+                                    >
+                                        <RiLoginBoxLine /> Log in
+                                    </Link>
+                                </Button>
+                            )}
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="relative ml-6">
+                            <div
+                                className={`hamburger ${menuOpen ? "open" : ""}`}
+                                onMouseDown={() => setMenuOpen(!menuOpen)}
                             >
-                                <RiLoginBoxLine /> Log in
-                            </Link>
-                        </Button>
-                    )}
-                </div>
+                                <span className="hamburger-span"></span>
+                                <span className="hamburger-span"></span>
+                                <span className="hamburger-span"></span>
+                                <span className="hamburger-span"></span>
+                                <span className="hamburger-span"></span>
+                                <span className="hamburger-span"></span>
+                            </div>
+                            <div
+                                className={`absolute z-500 left-0 mt-4 w-48 border rounded shadow-xl flex flex-col bg-[var(--background)] ${menuOpen ? "translate-x-0" : "translate-x-[-250px]"} transition duration-300 ease-in-out`}
+                            >
+                                <Link
+                                    href="/"
+                                    className="px-4 py-2 hover:bg-gray-100"
+                                    onClick={() => setMenuOpen(false)}
+                                >
+                                    <RiHome2Line className="inline mr-2" /> Home
+                                </Link>
+                                {userState.loggedIn && (
+                                    <Link
+                                        href="/dashboard"
+                                        className="px-4 py-2 hover:bg-gray-100"
+                                        onClick={() => setMenuOpen(false)}
+                                    >
+                                        <RiBarChartFill className="inline mr-2" /> Dashboard
+                                    </Link>
+                                )}
+                                {userState.loggedIn ? (
+                                    <button
+                                        onClick={logoutClickHandler}
+                                        className="px-4 py-2 flex items-center hover:bg-gray-100"
+                                    >
+                                        <RiLogoutBoxLine className="mr-2" /> Log out
+                                    </button>
+                                ) : (
+                                    <Link
+                                        href="/login"
+                                        className="px-4 py-2 hover:bg-gray-100"
+                                        onClick={() => setMenuOpen(false)}
+                                    >
+                                        <RiLoginBoxLine className="inline mr-2" /> Log in
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
+                    </>
+                )}
             </header>
-            <div className="h-full w-full flex flex-col justify-center items-center load-in">
-                <UserContext.Provider value={{ userState, setUserState }}>
+            <div className="min-h-0 flex flex-1 justify-center items-center w-full load-in">
+                <StateContext.Provider
+                    value={{ userState, setUserState, smallScreen, setSmallScreen }}
+                >
                     {children}
-                </UserContext.Provider>
+                </StateContext.Provider>
             </div>
             <footer className="w-full flex flex-col justify-center items-center relative mb-6">
                 <div className="flex justify-center items-center gap-[20px]">
@@ -109,9 +184,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                         <RiGithubFill />
                     </a>
                 </div>
-                {brokenStyling && (
-                    <p className="text-sm">Styles may break on mobile/vertical screens</p>
-                )}
             </footer>
         </>
     );
