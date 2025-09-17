@@ -165,6 +165,7 @@ export default function Page() {
                 <p>Loading...</p>
             )}
             <div className={`modal ${showQrModal ? "modal-show" : ""} fade-in`}>
+                <div className="modal-bg" />
                 <div className="relative flex justify-center items-center p-12 rounded border border-white bg-[var(--background)] z-200">
                     <QRCodeCanvas
                         value={`https://relay.pepper.fyi/${url.url_data?.id}`}

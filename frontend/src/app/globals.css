@@ -122,7 +122,7 @@ button:focus {
     pointer-events: auto;
 }
 
-.modal::before {
+.modal-bg {
     content: "";
     position: fixed;
     inset: 0;
@@ -131,5 +131,5 @@ button:focus {
     top: 0;
     left: 0;
     transition: all 0.2s ease-in-out;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(2px);
 }
