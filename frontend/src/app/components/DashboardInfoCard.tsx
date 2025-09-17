@@ -9,7 +9,7 @@ export const DashboardInfoCard = ({
 }) => {
     return (
         <div className={`flex flex-col justify-center items-center gap-1 ${className}`}>
-            <h2 className="text-lg font-bold mb-2">{title}</h2>
+            <h2 className="text-xl font-bold mb-2">{title}</h2>
             {children}
         </div>
     );

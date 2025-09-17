@@ -2,7 +2,7 @@
 import { useContext, useEffect, useState } from "react";
 
 import { Button } from "@/app/components/Button";
-import { UserContext } from "@/app/context/UserContext";
+import { StateContext } from "@/app/context/StateContext";
 import { StatusMessage } from "@/util/types";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -19,7 +19,7 @@ export default function Login() {
         success: null,
         message: null,
     });
-    const { setUserState } = useContext(UserContext);
+    const { setUserState } = useContext(StateContext);
 
     useEffect(() => {
         (async () => {
