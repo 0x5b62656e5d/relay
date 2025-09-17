@@ -72,7 +72,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                     )}
                 </div>
                 <h1 className="text-4xl font-bold">
-                    <Link href="/" className="relative z-10">
+                    <Link href="/" className="relative">
                         Relay
                     </Link>
                 </h1>
@@ -89,7 +89,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                         <Button type="button" className="flex justify-center items-center">
                             <Link
                                 href="/login"
-                                className="flex justify-center items-center gap-2 relative z-10"
+                                className="flex justify-center items-center gap-2 relative"
                             >
                                 <RiLoginBoxLine /> Log in
                             </Link>
