@@ -88,6 +88,31 @@ export default function Page() {
         }
     };
 
+    // const handleEscapeKeyModal = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    //     e.preventDefault();
+    //     console.log(e.key);
+
+    //     if (e.key === "Escape") {
+    //         setShowQrModal(false);
+    //     }
+    // };
+
+    useEffect(() => {
+        if (!showQrModal) {
+            return;
+        }
+
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") {
+                setShowQrModal(false);
+            }
+        };
+
+        window.addEventListener("keydown", onKey);
+
+        return () => window.removeEventListener("keydown", onKey);
+    }, [showQrModal]);
+
     return (
         <div className="w-full h-full flex justify-center items-center">
             {url ? (
@@ -168,7 +193,15 @@ export default function Page() {
             {computedStyle &&
                 createPortal(
                     <div className={`modal ${showQrModal ? "modal-show" : ""} fade-in`}>
-                        <div className="modal-bg" />
+                        <div
+                            className="modal-bg"
+                            onClick={e => {
+                                console.log(e.target, e.currentTarget);
+                                if (e.target === e.currentTarget) {
+                                    setShowQrModal(false);
+                                }
+                            }}
+                        />
                         <div className="relative flex justify-center items-center p-12 rounded border border-white bg-[var(--background)] z-200">
                             <QRCodeCanvas
                                 value={`https://relay.pepper.fyi/${url.url_data?.id}`}
