@@ -22,6 +22,15 @@ export default function Home() {
 
     const handleShorten = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        const urlRegex =
+            /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/;
+
+        if (!(event.target as HTMLFormElement).url.value.match(urlRegex)) {
+            setStatusMessage({ success: false, message: "Please enter a valid URL." });
+            return;
+        }
+
         setStatusMessage({ success: null, message: null });
         const res = await fetch("/api/url/create", {
             method: "POST",
@@ -87,10 +96,10 @@ export default function Home() {
                     <div className="relative flex flex-col justify-center items-center text-center my-[10px] w-full">
                         <label htmlFor="url">Enter URL:</label>
                         <input
-                            type="url"
+                            type="text"
                             id="url"
                             className="url-input mt-[6px] text-center py-2"
-                            placeholder="https://example.com"
+                            placeholder="example.com"
                             minLength={1}
                             required
                             aria-required="true"
