@@ -114,7 +114,7 @@ export default function Page() {
         const imgUrl = canvas.toDataURL("image/png");
         const downloadLink = document.createElement("a");
         downloadLink.href = imgUrl;
-        downloadLink.download = `Relay QR Code - https://relay.pepper.fyi/${url.url_data?.id}.png`;
+        downloadLink.download = `Relay QR Code - relay.pepper.fyi/${url.url_data?.id}.png`;
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
