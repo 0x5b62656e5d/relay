@@ -13,6 +13,7 @@
     "axios": "^1.10.0",
     "chart.js": "^4.5.0",
     "chartjs-adapter-date-fns": "^3.0.0",
+    "cheerio": "^1.1.2",
     "date-fns": "^4.1.0",
     "next": "15.4.2",
     "qrcode.react": "^4.2.0",
