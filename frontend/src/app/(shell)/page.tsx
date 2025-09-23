@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/app/components/Button";
 import { StatusMessage } from "@/util/types";
-import { RiClipboardLine, RiQrCodeLine } from "@remixicon/react";
+import { RiClipboardLine, RiDownloadLine, RiQrCodeLine } from "@remixicon/react";
 import { QRCodeCanvas } from "qrcode.react";
 
 export default function Home() {
@@ -54,6 +54,22 @@ export default function Home() {
 
     const showQrCode = () => {
         setShowQr(true);
+    };
+
+    const downloadQrCode = () => {
+        const canvas = document.querySelector("canvas");
+
+        if (!canvas) {
+            return;
+        }
+
+        const imgUrl = canvas.toDataURL("image/png");
+        const downloadLink = document.createElement("a");
+        downloadLink.href = imgUrl;
+        downloadLink.download = `Relay QR Code - ${shortenedUrl}.png`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
     };
 
     return (
@@ -107,7 +123,7 @@ export default function Home() {
                     Copied to clipboard!
                 </p>
                 <div
-                    className={`mt-2 fade-in ${showQr ? "opacity-100 block" : "opacity-0 hidden"}`}
+                    className={`mt-2 fade-in flex flex-col justify-center items-center ${showQr ? "opacity-100 block" : "opacity-0 hidden"}`}
                 >
                     <QRCodeCanvas
                         value={shortenedUrl ?? ""}
@@ -117,6 +133,9 @@ export default function Home() {
                         size={512}
                         className="w-42! h-42!"
                     />
+                    <Button type="button" className="mt-2" onClick={downloadQrCode}>
+                        <RiDownloadLine />
+                    </Button>
                 </div>
             </div>
 

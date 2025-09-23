@@ -6,7 +6,7 @@ import { DashboardInfoCard } from "@/app/components/DashboardInfoCard";
 import ClicksLineChart from "@/app/components/UrlClickChart";
 import { formatDate } from "@/util/date";
 import { UrlClick, UrlData } from "@/util/types";
-import { RiClipboardLine, RiCloseLine, RiQrCodeLine } from "@remixicon/react";
+import { RiClipboardLine, RiCloseLine, RiDownloadLine, RiQrCodeLine } from "@remixicon/react";
 import { useParams } from "next/navigation";
 import { QRCodeCanvas } from "qrcode.react";
 import { createPortal } from "react-dom";
@@ -104,6 +104,22 @@ export default function Page() {
         return () => window.removeEventListener("keydown", onKey);
     }, [showQrModal]);
 
+    const downloadQrCode = () => {
+        const canvas = document.querySelector("canvas");
+
+        if (!canvas) {
+            return;
+        }
+
+        const imgUrl = canvas.toDataURL("image/png");
+        const downloadLink = document.createElement("a");
+        downloadLink.href = imgUrl;
+        downloadLink.download = `Relay QR Code - https://relay.pepper.fyi/${url.url_data?.id}.png`;
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    };
+
     return (
         <div className="w-full xl:h-full flex justify-center items-center">
             {url ? (
@@ -191,7 +207,7 @@ export default function Page() {
                                 }
                             }}
                         />
-                        <div className="relative flex justify-center items-center p-12 rounded border border-white bg-[var(--background)] z-200">
+                        <div className="relative flex flex-col justify-center items-center p-12 rounded border border-white bg-[var(--background)] z-200">
                             <QRCodeCanvas
                                 value={`https://relay.pepper.fyi/${url.url_data?.id}`}
                                 bgColor={`${computedStyle?.getPropertyValue("--background").trim()}00`}
@@ -200,6 +216,9 @@ export default function Page() {
                                 size={512}
                                 className="w-42! h-42! z-300"
                             />
+                            <Button type="button" className="mt-2" onClick={downloadQrCode}>
+                                <RiDownloadLine />
+                            </Button>
                             <button
                                 className="absolute top-0 left-0 m-4 z-110"
                                 onClick={() => setShowQrModal(false)}
