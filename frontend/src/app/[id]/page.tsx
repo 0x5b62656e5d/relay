@@ -37,7 +37,11 @@ export default function Page() {
     }, [id]);
 
     if (url !== "") {
-        redirect(url);
+        if (url.includes("://")) {
+            redirect(url);
+        } else {
+            redirect(`https://${url}`);
+        }
     }
 
     return (
