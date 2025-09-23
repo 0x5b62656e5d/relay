@@ -1,6 +1,6 @@
 import api from "@/util/api";
-import { NextRequest, NextResponse } from "next/server";
 import * as cheerio from "cheerio";
+import { NextRequest, NextResponse } from "next/server";
 
 interface OgTags {
     title?: string;
@@ -105,7 +105,7 @@ export async function GET(request: NextRequest, { params }: { params: Params }) 
                 "Cache-Control": "public, s-maxage=3600, max-age=0",
             },
         });
-    } catch (error) {
+    } catch {
         const html = `
             <!DOCTYPE html>
             <html lang="en">
