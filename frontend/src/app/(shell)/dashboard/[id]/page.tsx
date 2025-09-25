@@ -137,7 +137,13 @@ export default function Page() {
                             </div>
                         </DashboardInfoCard>
                         <DashboardInfoCard title="Original URL">
-                            <p>{url.url_data?.url}</p>
+                            <p>
+                                <a href={url.url_data?.url.includes("//") ? url.url_data?.url : `https://${url.url_data?.url}`} target="_blank" rel="noreferrer">
+                                    {(url.url_data?.url.length || 0) > 20
+                                        ? url.url_data?.url.substring(0, 18) + "..."
+                                        : url.url_data?.url}
+                                </a>
+                            </p>
                         </DashboardInfoCard>
                         <DashboardInfoCard title="Created at">
                             <p>

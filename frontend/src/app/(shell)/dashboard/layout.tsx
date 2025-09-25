@@ -45,7 +45,11 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                                 return (
                                     <Link key={u.id} href={`/dashboard/${u.id}`}>
                                         <p>{u.id}</p>
-                                        <p>{u.url}</p>
+                                        <p>
+                                            {u.url.length > 20
+                                                ? u.url.substring(0, 18) + "..."
+                                                : u.url}
+                                        </p>
                                     </Link>
                                 );
                             }
@@ -98,7 +102,11 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                                         onClick={() => setMenuOpen(false)}
                                     >
                                         <p>{u.id}</p>
-                                        <p>{u.url}</p>
+                                        <p>
+                                            {u.url.length > 20
+                                                ? u.url.substring(0, 18) + "..."
+                                                : u.url}
+                                        </p>
                                     </Link>
                                 );
                             }
