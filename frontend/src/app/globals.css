@@ -60,7 +60,7 @@ body {
 input {
     background-color: transparent;
     width: 100%;
-    @apply border p-2 rounded-xl
+    @apply border p-2 rounded-xl;
 }
 
 a,

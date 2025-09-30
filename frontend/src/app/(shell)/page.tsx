@@ -102,11 +102,16 @@ export default function Home() {
                             aria-required="true"
                         />
                     </div>
-                    <Button type="submit" className="h-10 w-10 flex justify-center items-center p-2! rounded-xl">
+                    <Button
+                        type="submit"
+                        className="h-10 w-10 flex justify-center items-center p-2! rounded-xl"
+                    >
                         <RiSendPlaneLine />
                     </Button>
                 </form>
-                <p className="mt-4 text-xs opacity-75">All URLs expire 30 days after their last click!</p>
+                <p className="mt-4 text-xs opacity-75">
+                    All URLs expire 30 days after their last click!
+                </p>
             </div>
 
             <div
