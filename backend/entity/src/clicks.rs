@@ -10,8 +10,9 @@ pub struct Model {
     pub id: String,
     pub url_id: String,
     pub clicked_at: DateTimeWithTimeZone,
-    pub ip_address: Option<String>,
     pub user_agent: Option<String>,
+    pub is_bot: bool,
+    pub country: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
