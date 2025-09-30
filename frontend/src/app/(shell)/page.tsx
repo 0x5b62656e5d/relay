@@ -95,7 +95,7 @@ export default function Home() {
                         <input
                             type="text"
                             id="url"
-                            className="text-center py-2 border"
+                            className="text-center border"
                             placeholder="Enter a URL..."
                             minLength={1}
                             required

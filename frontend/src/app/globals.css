@@ -60,27 +60,7 @@ body {
 input {
     background-color: transparent;
     width: 100%;
-    /* border: none; */
-    /* border-bottom: 1px solid #a69080; */
-    @apply rounded-xl
-}
-
-input + span {
-    position: absolute;
-    background: #6c584c;
-    width: 0%;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    transition: 0.3s;
-}
-
-input:focus {
-    outline: none;
-}
-
-input:focus + span {
-    width: 100%;
+    @apply border p-2 rounded-xl
 }
 
 a,

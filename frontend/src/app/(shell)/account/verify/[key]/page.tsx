@@ -45,8 +45,8 @@ export default function Verify() {
                 <p>Loading...</p>
             ) : (
                 <p
-                    className={`text-center mt-4 text-${
-                        statusMessage.success ? "green-600" : "red-500"
+                    className={`text-center mt-4 ${
+                        statusMessage.success ? "text-green-500" : "text-red-500"
                     } fade-in ${statusMessage.message ? "opacity-100" : "opacity-0"}`}
                 >
                     {statusMessage.message}

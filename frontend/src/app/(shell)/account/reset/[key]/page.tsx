@@ -101,6 +101,7 @@ export default function Login() {
                             <input
                                 type="password"
                                 name="password"
+                                placeholder="chocolates123!"
                                 value={formData.password}
                                 onChange={handleChange}
                                 disabled={loading}
@@ -116,6 +117,7 @@ export default function Login() {
                             <input
                                 type="password"
                                 name="confirmPassword"
+                                placeholder="chocolates123!"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
                                 disabled={loading}
@@ -127,8 +129,8 @@ export default function Login() {
                         <Button type="submit" text="Reset password" loading={loading} />
 
                         <p
-                            className={`text-center mt-4 text-${
-                                statusMessage.success ? "green-600" : "red-500"
+                            className={`text-center mt-4 ${
+                                statusMessage.success ? "text-green-500" : "text-red-500"
                             } fade-in ${statusMessage.message ? "opacity-100" : "opacity-0"}`}
                         >
                             {statusMessage.message}
