@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/app/components/Button";
 import { StatusMessage } from "@/util/types";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 
 interface LoginType {
@@ -80,9 +81,29 @@ export default function Login() {
             return;
         }
 
-        setStatusMessage({ success: true, message: "Password reset successfully!" });
+        setStatusMessage({
+            success: true,
+            message: "Password reset successfully! You will be redirected to login shortly.",
+        });
 
         setLoading(false);
+
+        setTimeout(() => {
+            window.location.href = "/login";
+
+            setStatusMessage({
+                success: true,
+                message: (
+                    <p>
+                        Password reset successfully! You will be redirected to login shortly. Click{" "}
+                        <Link href="/login" className="underline">
+                            here
+                        </Link>{" "}
+                        if you have not been redirected yet.
+                    </p>
+                ),
+            });
+        }, 3000);
     };
 
     return (

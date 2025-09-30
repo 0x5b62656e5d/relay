@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+
 export default interface StandardResponse {
     success: boolean;
     data: Record<string, unknown> | null;
@@ -25,5 +27,5 @@ export interface UrlClick {
 
 export interface StatusMessage {
     success: boolean | null;
-    message: string | null;
+    message: string | ReactElement | null;
 }
