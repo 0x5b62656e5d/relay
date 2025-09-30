@@ -92,6 +92,7 @@ export default function Login() {
                     <input
                         type="email"
                         name="email"
+                        placeholder="john@example.com"
                         value={formData.email}
                         onChange={handleChange}
                         disabled={loading}
@@ -107,6 +108,7 @@ export default function Login() {
                     <input
                         type="password"
                         name="password"
+                        placeholder="chocolates123!"
                         value={formData.password}
                         onChange={handleChange}
                         disabled={loading}
@@ -118,8 +120,8 @@ export default function Login() {
                 <Button type="submit" text="Log in" loading={loading} />
 
                 <p
-                    className={`text-center text-${
-                        statusMessage.success ? "green-600" : "red-500"
+                    className={`text-center ${
+                        statusMessage.success ? "text-green-500" : "text-red-500"
                     } fade-in ${statusMessage.message ? "opacity-100" : "opacity-0"}`}
                 >
                     {statusMessage.message}

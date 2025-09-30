@@ -75,10 +75,10 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
     return (
         <>
-            <header className="w-full xl:flex xl:justify-between xl:items-center gap-[20px] relative mt-6 mb-6">
+            <header className="w-full xl:flex xl:justify-center xl:items-center gap-[20px] mt-6 mb-6">
                 {!smallScreen ? (
                     <>
-                        <div className="pl-6">
+                        <div className="absolute left-6">
                             {userState.loggedIn && (
                                 <Button type="button" className="flex justify-center items-center">
                                     <Link
@@ -95,7 +95,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                                 Relay
                             </Link>
                         </h1>
-                        <div className="pr-6">
+                        <div className="absolute right-6">
                             {userState.loggedIn ? (
                                 <Button
                                     type="button"

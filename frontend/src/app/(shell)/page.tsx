@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/app/components/Button";
 import { StatusMessage } from "@/util/types";
-import { RiClipboardLine, RiDownloadLine, RiQrCodeLine } from "@remixicon/react";
+import { RiClipboardLine, RiDownloadLine, RiQrCodeLine, RiSendPlaneLine } from "@remixicon/react";
 import { QRCodeCanvas } from "qrcode.react";
 
 export default function Home() {
@@ -83,31 +83,35 @@ export default function Home() {
 
     return (
         <div className="h-full flex flex-col justify-center items-center load-in">
-            <h1 className="text-4xl font-bold">Relay</h1>
-            <p className="mt-4 text-xl">A URL shortener built with NextJS and Rust</p>
-            <p className="mt-2 text-m">All URL&apos;s expire 30 days after their last click!</p>
-
-            <div className="mt-6">
+            <h1 className="text-8xl font-extrabold tracking-tight">Relay</h1>
+            <p className="mt-4 text-xl opacity-75">A URL shortener built with NextJS and Rust</p>
+            <div className="mt-6 flex flex-col justify-center items-center">
                 <form
                     onSubmit={handleShorten}
                     method="POST"
-                    className="flex flex-col justify-center items-center gap-[6px] w-70"
+                    className="flex justify-center items-center gap-[6px] w-70"
                 >
-                    <div className="relative flex flex-col justify-center items-center text-center my-[10px] w-full">
-                        <label htmlFor="url">Enter URL:</label>
+                    <div className="relative flex flex-col justify-center items-center text-center w-full">
                         <input
                             type="text"
                             id="url"
-                            className="url-input mt-[6px] text-center py-2"
-                            placeholder="example.com"
+                            className="text-center border"
+                            placeholder="Enter a URL..."
                             minLength={1}
                             required
                             aria-required="true"
                         />
-                        <span className="input-border" />
                     </div>
-                    <Button type="submit" text="Shorten URL" />
+                    <Button
+                        type="submit"
+                        className="h-10 w-10 flex justify-center items-center p-2! rounded-xl"
+                    >
+                        <RiSendPlaneLine />
+                    </Button>
                 </form>
+                <p className="mt-4 text-xs opacity-75">
+                    All URLs expire 30 days after their last click!
+                </p>
             </div>
 
             <div
