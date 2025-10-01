@@ -5,7 +5,11 @@ use crate::{
     util::{generate_nanoid::generate_nanoid, token::decode_token},
     validate_body, validate_path,
 };
-use actix_web::{HttpRequest, HttpResponse, get, http::header::HeaderMap, post, web};
+use actix_web::{
+    HttpRequest, HttpResponse, get,
+    http::header::{HeaderMap, HeaderValue},
+    post, web,
+};
 use chrono::Utc;
 use codes_iso_3166::part_1::CountryCode;
 use entity::{clicks, urls};
@@ -61,7 +65,10 @@ pub async fn get_url(
                 CountryCode::from_str(
                     headers
                         .get("CF-IPCountry")
-                        .unwrap()
+                        .unwrap_or_else(|| {
+                            static HEADER: HeaderValue = HeaderValue::from_static("Unknown");
+                            &HEADER
+                        })
                         .to_str()
                         .unwrap_or_else(|_| "Unknown"),
                 );
@@ -71,12 +78,20 @@ pub async fn get_url(
                 Err(_) => "Unknown".to_string(),
             };
 
-            let user_agent: String = headers
-                .get("User-Agent")
-                .unwrap()
-                .to_str()
-                .unwrap_or_else(|_| "Unknown")
-                .to_string();
+            let user_agent: String = {
+                let ua: String = headers
+                    .get("User-Agent")
+                    .unwrap()
+                    .to_str()
+                    .unwrap_or_else(|_| "Unknown")
+                    .to_string();
+
+                if ua.is_empty() {
+                    "Unknown".to_string()
+                } else {
+                    ua
+                }
+            };
 
             let regex: Regex = Regex::new(r"bot|crawler|spider|crawling").unwrap();
 
