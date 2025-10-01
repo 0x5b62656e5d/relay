@@ -16,12 +16,12 @@ pub async fn verify(
     let verification_key: String = verification_key.into_inner();
 
     let user: Option<users::Model> = users::Entity::find()
-        .filter(users::Column::VerificationKey.eq(&hash_sha256_key(&verification_key)))
+        .filter(users::Column::VerificationKey.eq(hash_sha256_key(&verification_key)))
         .one(db.get_ref())
         .await
         .unwrap();
 
-    if let None = user {
+    if user.is_none() {
         return HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,

@@ -46,7 +46,7 @@ pub async fn login(
 
     let v: bool = bcrypt::verify(
         &body.password,
-        &user.as_ref().unwrap().password.as_ref().unwrap(),
+        user.as_ref().unwrap().password.as_ref().unwrap(),
     )
     .unwrap_or(false);
 

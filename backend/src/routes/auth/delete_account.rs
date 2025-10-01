@@ -25,7 +25,7 @@ pub async fn delete_account(
         .await
         .unwrap();
 
-    if let None = user {
+    if user.is_none() {
         return HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,
@@ -38,7 +38,7 @@ pub async fn delete_account(
 
     let v: bool = bcrypt::verify(
         &body.password,
-        &user.password.as_ref().unwrap(),
+        user.password.as_ref().unwrap(),
     )
     .unwrap_or(false);
 

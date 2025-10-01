@@ -70,7 +70,7 @@ pub async fn get_url(
                             &HEADER
                         })
                         .to_str()
-                        .unwrap_or_else(|_| "Unknown"),
+                        .unwrap_or("Unknown"),
                 );
 
             let country_name: String = match country {
@@ -83,7 +83,7 @@ pub async fn get_url(
                     .get("User-Agent")
                     .unwrap()
                     .to_str()
-                    .unwrap_or_else(|_| "Unknown")
+                    .unwrap_or("Unknown")
                     .to_string();
 
                 if ua.is_empty() {
@@ -102,7 +102,6 @@ pub async fn get_url(
                 country: Set(Some(country_name)),
                 user_agent: Set(Some(user_agent.clone())),
                 is_bot: Set(regex.is_match(&user_agent.to_lowercase())),
-                ..Default::default()
             };
 
             if let Err(e) = active_click.insert(db.get_ref()).await {

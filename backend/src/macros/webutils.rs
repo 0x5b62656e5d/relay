@@ -8,7 +8,7 @@ macro_rules! validate_body {
                 log::error!("Failed to parse body: {}", err);
 
                 return HttpResponse::BadRequest().json(
-                    crate::response::make_query_response::<()>(
+                    $crate::response::make_query_response::<()>(
                         false,
                         None,
                         Some("Invalid body format"),
@@ -28,7 +28,7 @@ macro_rules! validate_path {
             Ok(p) => p,
             Err(_) => {
                 return HttpResponse::BadRequest().json(
-                    crate::response::make_query_response::<()>(false, None, Some($err_msg), None),
+                    $crate::response::make_query_response::<()>(false, None, Some($err_msg), None),
                 );
             }
         }

@@ -24,7 +24,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     return !smallScreen ? (
         <div className="w-full h-full grid grid-cols-[1fr_5fr] justify-center items-center load-in">
             <div className="h-full flex flex-col justify-start p-10 gap-10">
-                {/* <div className="relative flex flex-col justify-center items-center"> */}
                 <input
                     type="text"
                     name="url-filter"
@@ -34,7 +33,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                     required
                     aria-required="true"
                 />
-                {/* </div> */}
                 <div className="h-[70vh] flex flex-col gap-6 items-baseline overflow-y-auto p-2">
                     {url &&
                         url.map(u => {

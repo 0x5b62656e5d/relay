@@ -56,12 +56,12 @@ pub fn init_routes(cfg: &mut web::ServiceConfig) {
             .service(
                 web::scope("/create")
                     .wrap(Governor::new(&url_create_governor))
-                    .service(url::url::create_url),
+                    .service(url::urls::create_url),
             )
             .service(
                 web::scope("/link")
                     .wrap(Governor::new(&url_get_governor))
-                    .service(url::url::get_url),
+                    .service(url::urls::get_url),
             )
             .service(
                 web::scope("/list")

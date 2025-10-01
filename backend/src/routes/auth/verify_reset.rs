@@ -14,12 +14,12 @@ pub async fn verify(
     let reset_key: String = reset_key.into_inner();
 
     let user: Option<users::Model> = users::Entity::find()
-        .filter(users::Column::ResetKey.eq(&hash_sha256_key(&reset_key)))
+        .filter(users::Column::ResetKey.eq(hash_sha256_key(&reset_key)))
         .one(db.get_ref())
         .await
         .unwrap();
 
-    if let None = user {
+    if user.is_none() {
         return HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,

@@ -264,7 +264,6 @@ export default function Page() {
                         <div
                             className="modal-bg"
                             onClick={e => {
-                                console.log(e.target, e.currentTarget);
                                 if (e.target === e.currentTarget) {
                                     setShowQrModal(false);
                                 }
