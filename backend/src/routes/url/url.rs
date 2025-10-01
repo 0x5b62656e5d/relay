@@ -3,8 +3,9 @@ use crate::{
     util::{generate_nanoid::generate_nanoid, token::decode_token},
     validate_body, validate_path,
 };
-use actix_web::{HttpRequest, HttpResponse, get, post, web};
+use actix_web::{HttpRequest, HttpResponse, get, http::header::HeaderMap, post, web};
 use chrono::Utc;
+use codes_iso_3166::part_1::CountryCode;
 use entity::{clicks, urls};
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, DatabaseConnection, DbErr, EntityTrait, FromQueryResult,
@@ -27,9 +28,11 @@ struct UrlQueryResult {
 #[get("/{url_id}")]
 pub async fn get_url(
     url_id: Result<web::Path<String>, actix_web::error::Error>,
+    req: HttpRequest,
     db: web::Data<DatabaseConnection>,
 ) -> HttpResponse {
     let url_id: web::Path<String> = validate_path!(url_id, "Invalid URL ID");
+    let headers: &HeaderMap = req.headers();
 
     let url: Result<Option<UrlQueryResult>, DbErr> = urls::Entity::find_by_id(url_id.into_inner())
         .select_only()
@@ -51,10 +54,33 @@ pub async fn get_url(
                 log::error!("Failed to update URL clicks: {}", e);
             }
 
+            let country: Result<CountryCode, codes_iso_3166::CountryCodeError> =
+                CountryCode::from_str(
+                    headers
+                        .get("CF-IPCountry")
+                        .unwrap()
+                        .to_str()
+                        .unwrap_or_else(|_| "Unknown"),
+                );
+
+            let country_name: String = match country {
+                Ok(c) => c.short_name().split(" (").collect::<Vec<&str>>()[0].to_string(),
+                Err(_) => "Unknown".to_string(),
+            };
+
+            let user_agent: String = headers
+                .get("User-Agent")
+                .unwrap()
+                .to_str()
+                .unwrap_or_else(|_| "Unknown")
+                .to_string();
+
             let active_click: clicks::ActiveModel = clicks::ActiveModel {
                 id: Set(cuid2::create_id()),
                 url_id: Set(url.id.clone()),
                 clicked_at: Set(Utc::now().fixed_offset()),
+                country: Set(Some(country_name)),
+                user_agent: Set(Some(user_agent.clone())),
                 ..Default::default()
             };
 
