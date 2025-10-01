@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/app/components/Button";
 import { StateContext } from "@/app/context/StateContext";
@@ -9,6 +9,8 @@ import {
     RiHome2Line,
     RiLoginBoxLine,
     RiLogoutBoxLine,
+    RiSettings2Line,
+    RiUserLine,
 } from "@remixicon/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -21,10 +23,14 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     });
     const [smallScreen, setSmallScreen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const linkRef = useRef<HTMLAnchorElement>(null);
 
     const checkScreenWidth = () => {
         if (window.innerWidth < 1280) {
             setSmallScreen(true);
+            window.addEventListener("click", handleMenuClicks);
         } else {
             setSmallScreen(false);
         }
@@ -32,6 +38,21 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
     const handleMenuClicks = (e: MouseEvent) => {
         if (!(e.target as HTMLElement).classList.contains("hamburger-span")) {
+            setMenuOpen(false);
+        }
+    };
+
+    const handleDesktopMenuClicks = (e: MouseEvent) => {
+        const target = e.target as Node;
+
+        if (
+            menuRef.current &&
+            buttonRef.current &&
+            linkRef.current &&
+            !menuRef.current.contains(target) &&
+            !buttonRef.current.contains(target) &&
+            !linkRef.current.contains(target)
+        ) {
             setMenuOpen(false);
         }
     };
@@ -50,11 +71,12 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
 
         checkScreenWidth();
         window.addEventListener("resize", checkScreenWidth);
-        window.addEventListener("click", handleMenuClicks);
+        window.addEventListener("mousedown", handleDesktopMenuClicks);
 
         return () => {
             window.removeEventListener("resize", checkScreenWidth);
             window.removeEventListener("click", handleMenuClicks);
+            window.removeEventListener("mousedown", handleDesktopMenuClicks);
         };
     }, []);
 
@@ -95,14 +117,34 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                                 Relay
                             </Link>
                         </h1>
-                        <div className="absolute right-6">
+                        <div className="fixed right-6 z-500">
+                            <div
+                                ref={menuRef}
+                                className={`absolute z-700 right-0 mt-16 w-48 border rounded shadow-xl flex flex-col bg-[var(--background)] ${menuOpen ? "translate-x-0" : "translate-x-[250px]"} transition duration-300 ease-in-out ${userState.loggedIn ? "block" : "hidden"}`}
+                            >
+                                <Link
+                                    ref={linkRef}
+                                    href="/account/manage"
+                                    className="px-4 py-2 flex items-center"
+                                    onClick={() => setMenuOpen(false)}
+                                >
+                                    <RiSettings2Line className="inline mr-2" /> Manage account
+                                </Link>
+                                <button
+                                    ref={buttonRef}
+                                    onClick={logoutClickHandler}
+                                    className="px-4 py-2 flex items-center"
+                                >
+                                    <RiLogoutBoxLine className="mr-2" /> Log out
+                                </button>
+                            </div>
                             {userState.loggedIn ? (
                                 <Button
                                     type="button"
                                     className="flex justify-center items-center"
-                                    onClick={logoutClickHandler}
+                                    onClick={() => setMenuOpen(!menuOpen)}
                                 >
-                                    <RiLogoutBoxLine /> Log out
+                                    <RiUserLine /> Account
                                 </Button>
                             ) : (
                                 <Button type="button" className="flex justify-center items-center">
@@ -150,12 +192,21 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
                                     </Link>
                                 )}
                                 {userState.loggedIn ? (
-                                    <button
-                                        onClick={logoutClickHandler}
-                                        className="px-4 py-2 flex items-center hover:bg-gray-100"
-                                    >
-                                        <RiLogoutBoxLine className="mr-2" /> Log out
-                                    </button>
+                                    <>
+                                        <Link
+                                            href="/account/manage"
+                                            className="px-4 py-2 hover:bg-gray-100"
+                                            onClick={() => setMenuOpen(false)}
+                                        >
+                                            <RiUserLine className="inline mr-2" /> Manage account
+                                        </Link>
+                                        <button
+                                            onClick={logoutClickHandler}
+                                            className="px-4 py-2 flex items-center hover:bg-gray-100"
+                                        >
+                                            <RiLogoutBoxLine className="mr-2" /> Log out
+                                        </button>
+                                    </>
                                 ) : (
                                     <Link
                                         href="/login"
