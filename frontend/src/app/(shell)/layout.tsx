@@ -78,7 +78,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
             window.removeEventListener("click", handleMenuClicks);
             window.removeEventListener("mousedown", handleDesktopMenuClicks);
         };
-    }, []);
+    });
 
     const logoutClickHandler = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
