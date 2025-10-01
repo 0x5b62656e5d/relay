@@ -36,8 +36,14 @@ pub async fn delete_account(
 
     let user: users::Model = user.unwrap();
 
-    if body.password != user.password.unwrap_or_default() {
-        return HttpResponse::BadRequest().json(make_query_response::<()>(
+    let v: bool = bcrypt::verify(
+        &body.password,
+        &user.password.as_ref().unwrap(),
+    )
+    .unwrap_or(false);
+
+    if !v {
+        return HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,
             Some("Incorrect password"),
