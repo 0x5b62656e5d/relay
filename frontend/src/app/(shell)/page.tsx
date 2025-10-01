@@ -23,15 +23,28 @@ export default function Home() {
     const handleShorten = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
+        setStatusMessage({ success: null, message: null });
+
         const urlRegex =
             /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/;
 
         if (!(event.target as HTMLFormElement).url.value.match(urlRegex)) {
             setStatusMessage({ success: false, message: "Please enter a valid URL." });
+            setShortenedUrl(null);
+            setCopied(false);
             return;
         }
 
-        setStatusMessage({ success: null, message: null });
+        if (((event.target as HTMLFormElement).url.value as string).includes("relay.pepper.fyi")) {
+            setStatusMessage({
+                success: false,
+                message: "You are not allowed to shorten this URL.",
+            });
+            setShortenedUrl(null);
+            setCopied(false);
+            return;
+        }
+
         const res = await fetch("/api/url/create", {
             method: "POST",
             headers: {
@@ -46,6 +59,8 @@ export default function Home() {
 
         if (shortenedRes.error) {
             setStatusMessage({ success: false, message: shortenedRes.error });
+            setShortenedUrl(null);
+            setCopied(false);
         } else {
             setShortenedUrl(`https://relay.pepper.fyi/${shortenedRes.data.urlId}`);
             setCopied(false);
