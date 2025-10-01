@@ -17,11 +17,17 @@ export async function GET(request: NextRequest, { params }: { params: Params }) 
     const { id } = await params;
 
     try {
-        const res = await api.get(`/url/link/${id}`);
+        const userAgent = request.headers.get("user-agent") || "";
+
+        const res = await api.get(`/url/link/${id}`, {
+            headers: {
+                "User-Agent": userAgent,
+                "CF-IPCountry": request.headers.get("CF-IPCountry") || "Unknown",
+            },
+        });
 
         const url = res.data.data;
 
-        const userAgent = request.headers.get("user-agent") || "";
         const correctedUrl = url.includes("://") ? url : `https://${url}`;
 
         if (!/bot|crawler|spider|crawling/i.test(userAgent.toLowerCase())) {
