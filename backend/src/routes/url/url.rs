@@ -7,6 +7,7 @@ use actix_web::{HttpRequest, HttpResponse, get, http::header::HeaderMap, post, w
 use chrono::Utc;
 use codes_iso_3166::part_1::CountryCode;
 use entity::{clicks, urls};
+use regex::Regex;
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, DatabaseConnection, DbErr, EntityTrait, FromQueryResult,
     QuerySelect,
@@ -75,12 +76,15 @@ pub async fn get_url(
                 .unwrap_or_else(|_| "Unknown")
                 .to_string();
 
+            let regex: Regex = Regex::new(r"bot|crawler|spider|crawling").unwrap();
+
             let active_click: clicks::ActiveModel = clicks::ActiveModel {
                 id: Set(cuid2::create_id()),
                 url_id: Set(url.id.clone()),
                 clicked_at: Set(Utc::now().fixed_offset()),
                 country: Set(Some(country_name)),
                 user_agent: Set(Some(user_agent.clone())),
+                is_bot: Set(regex.is_match(&user_agent.to_lowercase())),
                 ..Default::default()
             };
 
