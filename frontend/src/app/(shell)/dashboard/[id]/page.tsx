@@ -123,7 +123,7 @@ export default function Page() {
     return (
         <div className="w-full xl:h-full flex justify-center items-center">
             {url ? (
-                <div className="h-[90%] w-[95%] grid xl:grid-rows-[1fr_4fr_2fr] grid-rows-[1fr_2fr_1fr] gap-4">
+                <div className="h-[90%] w-[95%] grid xl:grid-rows-[1fr_4fr_1fr] grid-rows-[1fr_3fr_1fr] gap-4">
                     <div className="w-full h-full xl:flex xl:flex-row xl:gap-0 grid grid-rows-[1fr_1fr_1fr] grid-cols-[1fr_1fr] justify-evenly items-center gap-2">
                         <DashboardInfoCard title="URL ID">
                             <div className="flex justify-center items-center gap-1">
@@ -171,14 +171,63 @@ export default function Page() {
                             <p>{url.url_data?.clicks}</p>
                         </DashboardInfoCard>
                     </div>
-                    <div className="h-full p-5">
-                        <div className="h-full w-auto flex justify-center items-center">
-                            <ClicksLineChart
-                                clicks={url.url_clicks ? url.url_clicks : []}
-                                foreground={
-                                    computedStyle?.getPropertyValue("--foreground").trim() as string
-                                }
-                            />
+                    <div className="h-full p-5 flex justify-center items-center">
+                        <div className="h-250 w-full grid grid-rows-[2fr_1fr] gap-10 justify-center items-center">
+                            <div className="h-150 xl:w-300 w-auto">
+                                <ClicksLineChart
+                                    clicks={url.url_clicks ? url.url_clicks : []}
+                                    foreground={
+                                        computedStyle
+                                            ?.getPropertyValue("--foreground")
+                                            .trim() as string
+                                    }
+                                />
+                            </div>
+                            <div className="h-full w-full">
+                                <div className="w-full h-full overflow-auto max-h-90 p-4">
+                                    <table className="w-full h-full table-auto border-collapse border rounded border-[var(--foreground)]">
+                                        <thead>
+                                            <tr>
+                                                <th className="border border-[var(--foreground)] p-2">
+                                                    Date clicked
+                                                </th>
+                                                <th className="border border-[var(--foreground)] p-2">
+                                                    Country
+                                                </th>
+                                                <th className="border border-[var(--foreground)] p-2">
+                                                    Bot
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {url.url_clicks && url.url_clicks.length > 0 ? (
+                                                url.url_clicks.map((click, index) => (
+                                                    <tr key={index}>
+                                                        <td className="border border-[var(--foreground)] p-2 text-center">
+                                                            {formatDate(click.clicked_at)}
+                                                        </td>
+                                                        <td className="border border-[var(--foreground)] p-2 text-center">
+                                                            {click.country || "Unknown"}
+                                                        </td>
+                                                        <td className="border border-[var(--foreground)] p-2 text-center">
+                                                            {click.is_bot ? "Yes" : "No"}
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td
+                                                        className="border border-[var(--foreground)] p-2 text-center"
+                                                        colSpan={3}
+                                                    >
+                                                        This URL hasn't been clicked yet :c
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className="w-full h-full grid xl:grid-cols-[3fr_1fr] grid-rows-[1fr_1fr] p-5 gap-4">
@@ -192,7 +241,7 @@ export default function Page() {
                                 onChange={e => setComment(e.target.value)}
                             />
                         </div>
-                        <div className="w-full h-full flex flex-col justify-center items-center gap-6">
+                        <div className="w-full h-full flex xl:flex-col justify-center items-center gap-6">
                             <Button type="button" className="w-[80%]" onClick={saveComment}>
                                 Save comment
                             </Button>

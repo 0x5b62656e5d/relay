@@ -1,11 +1,19 @@
+use std::str::FromStr;
+
 use crate::{
     response::make_query_response,
     util::{generate_nanoid::generate_nanoid, token::decode_token},
     validate_body, validate_path,
 };
-use actix_web::{HttpRequest, HttpResponse, get, post, web};
+use actix_web::{
+    HttpRequest, HttpResponse, get,
+    http::header::{HeaderMap, HeaderValue},
+    post, web,
+};
 use chrono::Utc;
+use codes_iso_3166::part_1::CountryCode;
 use entity::{clicks, urls};
+use regex::Regex;
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, DatabaseConnection, DbErr, EntityTrait, FromQueryResult,
     QuerySelect,
@@ -27,9 +35,11 @@ struct UrlQueryResult {
 #[get("/{url_id}")]
 pub async fn get_url(
     url_id: Result<web::Path<String>, actix_web::error::Error>,
+    req: HttpRequest,
     db: web::Data<DatabaseConnection>,
 ) -> HttpResponse {
     let url_id: web::Path<String> = validate_path!(url_id, "Invalid URL ID");
+    let headers: &HeaderMap = req.headers();
 
     let url: Result<Option<UrlQueryResult>, DbErr> = urls::Entity::find_by_id(url_id.into_inner())
         .select_only()
@@ -51,10 +61,47 @@ pub async fn get_url(
                 log::error!("Failed to update URL clicks: {}", e);
             }
 
+            let country: Result<CountryCode, codes_iso_3166::CountryCodeError> =
+                CountryCode::from_str(
+                    headers
+                        .get("CF-IPCountry")
+                        .unwrap_or_else(|| {
+                            static HEADER: HeaderValue = HeaderValue::from_static("Unknown");
+                            &HEADER
+                        })
+                        .to_str()
+                        .unwrap_or_else(|_| "Unknown"),
+                );
+
+            let country_name: String = match country {
+                Ok(c) => c.short_name().split(" (").collect::<Vec<&str>>()[0].to_string(),
+                Err(_) => "Unknown".to_string(),
+            };
+
+            let user_agent: String = {
+                let ua: String = headers
+                    .get("User-Agent")
+                    .unwrap()
+                    .to_str()
+                    .unwrap_or_else(|_| "Unknown")
+                    .to_string();
+
+                if ua.is_empty() {
+                    "Unknown".to_string()
+                } else {
+                    ua
+                }
+            };
+
+            let regex: Regex = Regex::new(r"bot|crawler|spider|crawling").unwrap();
+
             let active_click: clicks::ActiveModel = clicks::ActiveModel {
                 id: Set(cuid2::create_id()),
                 url_id: Set(url.id.clone()),
                 clicked_at: Set(Utc::now().fixed_offset()),
+                country: Set(Some(country_name)),
+                user_agent: Set(Some(user_agent.clone())),
+                is_bot: Set(regex.is_match(&user_agent.to_lowercase())),
                 ..Default::default()
             };
 

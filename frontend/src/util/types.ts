@@ -21,8 +21,9 @@ export interface UrlClick {
     id: string;
     url_id: string;
     clicked_at: Date;
-    user_agent: string;
-    ip_address: string;
+    user_agent?: string;
+    country?: string;
+    is_bot: boolean;
 }
 
 export interface StatusMessage {

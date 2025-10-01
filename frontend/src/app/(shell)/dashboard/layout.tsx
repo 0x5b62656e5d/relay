@@ -58,18 +58,18 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     ) : (
         <div className="w-full h-full flex flex-col justify-center items-center load-in">
             <div
-                className={`url-list-menu absolute left-0 top-[80] h-[80%] flex flex-col justify-start p-6 gap-10 z-300 bg-[var(--background)] border rounded ${menuOpen ? "translate-x-0" : "translate-x-[-220px]"} transition duration-300 ease-in-out`}
+                className={`url-list-menu absolute left-0 top-[80] h-[80%] flex flex-col justify-start p-6 gap-10 z-300 bg-[var(--background)] border rounded ${menuOpen ? "translate-x-0" : "translate-x-[-250px]"} transition duration-300 ease-in-out`}
             >
                 {menuOpen ? (
                     <RiArrowDropLeftLine
                         size={64}
-                        className="absolute right-[-60]"
+                        className="absolute right-[-70]"
                         onClick={() => setMenuOpen(false)}
                     />
                 ) : (
                     <RiArrowDropRightLine
                         size={64}
-                        className="absolute right-[-60]"
+                        className="absolute right-[-70]"
                         onClick={() => setMenuOpen(true)}
                     />
                 )}
