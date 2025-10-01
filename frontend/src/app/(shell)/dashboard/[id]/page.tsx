@@ -220,7 +220,7 @@ export default function Page() {
                                                         className="border border-[var(--foreground)] p-2 text-center"
                                                         colSpan={3}
                                                     >
-                                                        This URL hasn't been clicked yet :c
+                                                        This URL hasn&apos;t been clicked yet :c
                                                     </td>
                                                 </tr>
                                             )}
