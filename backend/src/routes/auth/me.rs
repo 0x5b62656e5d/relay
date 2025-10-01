@@ -60,7 +60,7 @@ pub async fn me(req: HttpRequest, db: web::Data<DatabaseConnection>) -> HttpResp
         .await
         .unwrap();
 
-    if let None = user {
+    if user.is_none() {
         return HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,

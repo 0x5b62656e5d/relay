@@ -1,4 +1,4 @@
-use crate::{config::ENV, types::types::TokenClaim};
+use crate::{config::ENV, types::typedefs::TokenClaim};
 use jsonwebtoken::TokenData;
 
 pub fn decode_token(token: String) -> Result<TokenData<TokenClaim>, jsonwebtoken::errors::Error> {

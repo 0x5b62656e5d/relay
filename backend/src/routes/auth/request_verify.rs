@@ -19,7 +19,7 @@ pub async fn request_verify(
         .await
         .unwrap();
 
-    if let None = user {
+    if user.is_none() {
         return HttpResponse::NotFound().json(make_query_response::<()>(
             false,
             None,
