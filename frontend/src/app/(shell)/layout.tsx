@@ -27,15 +27,6 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     const buttonRef = useRef<HTMLButtonElement>(null);
     const linkRef = useRef<HTMLAnchorElement>(null);
 
-    const checkScreenWidth = () => {
-        if (window.innerWidth < 1280) {
-            setSmallScreen(true);
-            window.addEventListener("click", handleMenuClicks);
-        } else {
-            setSmallScreen(false);
-        }
-    };
-
     const handleMenuClicks = (e: MouseEvent) => {
         if (!(e.target as HTMLElement).classList.contains("hamburger-span")) {
             setMenuOpen(false);
@@ -58,6 +49,15 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
     };
 
     useEffect(() => {
+        const checkScreenWidth = () => {
+            if (window.innerWidth < 1280) {
+                setSmallScreen(true);
+                window.addEventListener("click", handleMenuClicks);
+            } else {
+                setSmallScreen(false);
+            }
+        };
+
         (async () => {
             const res = await fetch("/api/auth/me");
 
@@ -78,7 +78,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
             window.removeEventListener("click", handleMenuClicks);
             window.removeEventListener("mousedown", handleDesktopMenuClicks);
         };
-    });
+    }, []);
 
     const logoutClickHandler = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
