@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use crate::{
     response::make_query_response,
     util::{generate_nanoid::generate_nanoid, token::decode_token},
