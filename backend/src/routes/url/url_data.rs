@@ -1,7 +1,7 @@
 use crate::{response::make_query_response, util::token::decode_token, validate_path};
 use actix_web::{HttpRequest, HttpResponse, get, web};
 use entity::{clicks, urls};
-use sea_orm::{ColumnTrait, DatabaseConnection, DbErr, EntityTrait, QueryFilter};
+use sea_orm::{ColumnTrait, DatabaseConnection, DbErr, EntityTrait, QueryFilter, QueryOrder};
 use serde::Serialize;
 
 #[derive(Serialize)]
@@ -52,6 +52,7 @@ pub async fn get_url_data(
         Ok(Some(url)) => {
             let clicks: Vec<clicks::Model> = clicks::Entity::find()
                 .filter(clicks::Column::UrlId.eq(url.id.clone()))
+                .order_by_desc(clicks::Column::ClickedAt)
                 .all(db.get_ref())
                 .await
                 .unwrap();
