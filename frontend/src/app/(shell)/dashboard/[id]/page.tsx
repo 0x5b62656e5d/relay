@@ -2,11 +2,11 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/app/components/Button";
-import { DashboardInfoCard } from "@/app/components/DashboardInfoCard";
+import ClickTable from "@/app/components/ClickTable";
+import DashboardInfoCards from "@/app/components/DashboardInfoCards";
 import ClicksLineChart from "@/app/components/UrlClickChart";
-import { formatDate } from "@/util/date";
 import { UrlClick, UrlData } from "@/util/types";
-import { RiClipboardLine, RiCloseLine, RiDownloadLine, RiQrCodeLine } from "@remixicon/react";
+import { RiCloseLine, RiDownloadLine } from "@remixicon/react";
 import { useParams } from "next/navigation";
 import { QRCodeCanvas } from "qrcode.react";
 import { createPortal } from "react-dom";
@@ -37,14 +37,6 @@ export default function Page() {
             }
         })();
     }, [id]);
-
-    const copyToClipboard = () => {
-        if (!url.url_data) {
-            return;
-        }
-
-        navigator.clipboard.writeText(`https://relay.pepper.fyi/${url.url_data.id}`);
-    };
 
     const saveComment = async () => {
         if (!url.url_data) {
@@ -125,51 +117,7 @@ export default function Page() {
             {url ? (
                 <div className="h-[90%] w-[95%] grid xl:grid-rows-[1fr_4fr_1fr] grid-rows-[1fr_3fr_1fr] gap-4">
                     <div className="w-full h-full xl:flex xl:flex-row xl:gap-0 grid grid-rows-[1fr_1fr_1fr] grid-cols-[1fr_1fr] justify-evenly items-center gap-2">
-                        <DashboardInfoCard title="URL ID">
-                            <div className="flex justify-center items-center gap-1">
-                                <p>{url.url_data?.id} </p>
-                                <button onClick={copyToClipboard}>
-                                    <RiClipboardLine />
-                                </button>
-                                <button onClick={() => setShowQrModal(true)}>
-                                    <RiQrCodeLine />
-                                </button>
-                            </div>
-                        </DashboardInfoCard>
-                        <DashboardInfoCard title="Original URL">
-                            <p>
-                                <a
-                                    href={
-                                        url.url_data?.url.includes("//")
-                                            ? url.url_data?.url
-                                            : `https://${url.url_data?.url}`
-                                    }
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    {(url.url_data?.url.length || 0) > 20
-                                        ? url.url_data?.url.substring(0, 18) + "..."
-                                        : url.url_data?.url}
-                                </a>
-                            </p>
-                        </DashboardInfoCard>
-                        <DashboardInfoCard title="Created at">
-                            <p>
-                                {url.url_data?.created_at
-                                    ? formatDate(url.url_data?.created_at)
-                                    : "Never"}
-                            </p>
-                        </DashboardInfoCard>
-                        <DashboardInfoCard title="Last clicked">
-                            <p>
-                                {url.url_data?.last_clicked
-                                    ? formatDate(url.url_data?.last_clicked)
-                                    : "Never"}
-                            </p>
-                        </DashboardInfoCard>
-                        <DashboardInfoCard title="Total clicks" className="col-span-2">
-                            <p>{url.url_data?.clicks}</p>
-                        </DashboardInfoCard>
+                        <DashboardInfoCards url={url} setShowQrModal={setShowQrModal} />
                     </div>
                     <div className="h-full p-5 flex justify-center items-center">
                         <div className="h-250 w-full grid grid-rows-[2fr_1fr] gap-10 justify-center items-center">
@@ -185,47 +133,7 @@ export default function Page() {
                             </div>
                             <div className="h-full w-full">
                                 <div className="w-full h-full overflow-auto max-h-90 p-4">
-                                    <table className="w-full h-full table-auto border-collapse border rounded border-[var(--foreground)]">
-                                        <thead>
-                                            <tr>
-                                                <th className="border border-[var(--foreground)] p-2">
-                                                    Date clicked
-                                                </th>
-                                                <th className="border border-[var(--foreground)] p-2">
-                                                    Country
-                                                </th>
-                                                <th className="border border-[var(--foreground)] p-2">
-                                                    Bot
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {url.url_clicks && url.url_clicks.length > 0 ? (
-                                                url.url_clicks.map((click, index) => (
-                                                    <tr key={index}>
-                                                        <td className="border border-[var(--foreground)] p-2 text-center">
-                                                            {formatDate(click.clicked_at)}
-                                                        </td>
-                                                        <td className="border border-[var(--foreground)] p-2 text-center">
-                                                            {click.country || "Unknown"}
-                                                        </td>
-                                                        <td className="border border-[var(--foreground)] p-2 text-center">
-                                                            {click.is_bot ? "Yes" : "No"}
-                                                        </td>
-                                                    </tr>
-                                                ))
-                                            ) : (
-                                                <tr>
-                                                    <td
-                                                        className="border border-[var(--foreground)] p-2 text-center"
-                                                        colSpan={3}
-                                                    >
-                                                        This URL hasn&apos;t been clicked yet :c
-                                                    </td>
-                                                </tr>
-                                            )}
-                                        </tbody>
-                                    </table>
+                                    <ClickTable url={url} />
                                 </div>
                             </div>
                         </div>
