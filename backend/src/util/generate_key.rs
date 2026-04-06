@@ -1,4 +1,4 @@
-use rand::{RngCore, rng};
+use rand::{Rng, rng};
 use sha2::{Digest, Sha256};
 
 /// Generates a random 32-byte key
